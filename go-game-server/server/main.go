@@ -31,7 +31,11 @@ func RunServer() {
 
 	// listen
 	log.Println("Server started")
-	addr := fmt.Sprintf("%s:%s", os.Getenv("HOST_NAME"), os.Getenv("GO_GAME_SERVER_PORT"))
+	hostname := os.Getenv("HOST_NAME")
+	if hostname == "localhost" {
+		hostname = ""
+	}
+	addr := fmt.Sprintf("%s:%s", hostname, os.Getenv("GO_GAME_SERVER_PORT"))
 	log.Printf("address: %s", addr)
 	if err := http.ListenAndServe(addr, h); err != nil {
 		panic(err)
