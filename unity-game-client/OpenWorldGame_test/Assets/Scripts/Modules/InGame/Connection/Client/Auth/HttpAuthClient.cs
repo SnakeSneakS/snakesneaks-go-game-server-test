@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking; 
 
+//Client: Http Authentication 
 public class HttpAuthClient 
 {
     private Uri targetUri;
@@ -29,14 +30,14 @@ public class HttpAuthClient
         }
 
 
-        byte[] postData = System.Text.Encoding.ASCII.GetBytes("{\"user\":" + JsonUtility.ToJson(user) + "}");
+        byte[] postData = System.Text.Encoding.UTF8.GetBytes("{\"user\":" + JsonUtility.ToJson(user) + "}");
         www = new UnityWebRequest(targetUri, "Post");
         www.uploadHandler = (UploadHandler)new UploadHandlerRaw(postData);
         www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         www.SetRequestHeader("Content-Type", "application/json");
         yield return www.SendWebRequest();
 
-        Debug.Log("send data: "+System.Text.Encoding.ASCII.GetString(www.uploadHandler.data));
+        Debug.Log("send data: "+System.Text.Encoding.UTF8.GetString(www.uploadHandler.data));
 
         switch (www.result)
         {
@@ -70,14 +71,14 @@ public class HttpAuthClient
             yield break;
         }
 
-        byte[] postData = System.Text.Encoding.ASCII.GetBytes("{\"user\":" + JsonUtility.ToJson(user) + "}");
+        byte[] postData = System.Text.Encoding.UTF8.GetBytes("{\"user\":" + JsonUtility.ToJson(user) + "}");
         www = new UnityWebRequest(targetUri, "Post");
         www.uploadHandler = (UploadHandler)new UploadHandlerRaw(postData);
         www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         www.SetRequestHeader("Content-Type", "application/json");
         yield return www.SendWebRequest();
 
-        Debug.Log("send data: " + System.Text.Encoding.ASCII.GetString(www.uploadHandler.data));
+        Debug.Log("send data: " + System.Text.Encoding.UTF8.GetString(www.uploadHandler.data));
 
         switch (www.result)
         {
@@ -111,14 +112,14 @@ public class HttpAuthClient
             yield break;
         }
 
-        byte[] postData = System.Text.Encoding.ASCII.GetBytes("{\"session\":" + JsonUtility.ToJson(session) + "}");
+        byte[] postData = System.Text.Encoding.UTF8.GetBytes("{\"session\":" + JsonUtility.ToJson(session) + "}");
         www = new UnityWebRequest(targetUri, "Post");
         www.uploadHandler = (UploadHandler)new UploadHandlerRaw(postData);
         www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         www.SetRequestHeader("Content-Type", "application/json");
         yield return www.SendWebRequest();
 
-        Debug.Log("send data: " + System.Text.Encoding.ASCII.GetString(www.uploadHandler.data));
+        Debug.Log("send data: " + System.Text.Encoding.UTF8.GetString(www.uploadHandler.data));
 
         switch (www.result)
         {

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/game"
 )
 
 // Handler handle request to game
@@ -13,18 +14,14 @@ type Handler struct {
 
 // NewHandler instantiate
 func NewHandler() *Handler {
-	//log.Println("Game handler")
-	//defer log.Println("Game handler end")
-
-	h := &Handler{
-		r: mux.NewRouter(),
-	}
-
-	//h.r.Handle("/login", login.NewHandler())
+	h := &Handler{}
 
 	return h
 }
 
+/*
+WEB SOCKET CONNECTION
+*/
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.r.ServeHTTP(w, r)
+	game.HandleWebSocket(w, r)
 }

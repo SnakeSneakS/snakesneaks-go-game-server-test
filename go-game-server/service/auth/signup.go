@@ -3,10 +3,11 @@ package auth
 import (
 	"context"
 	"log"
-	"snakesneaks-go-server-2021-8/m/service/core"
-	"snakesneaks-go-server-2021-8/m/service/model"
-	"snakesneaks-go-server-2021-8/m/service/model/mysql"
 	"strconv"
+
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/core"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/model"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/model/mysql"
 )
 
 //Signup user signup

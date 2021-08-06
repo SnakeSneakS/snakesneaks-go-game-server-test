@@ -1,4 +1,4 @@
-module snakesneaks-go-server-2021-8/m
+module github.com/snakesneaks/snakesneaks-go-game-server-test/g
 
 go 1.15
 
@@ -14,6 +14,7 @@ require (
 	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/google/go-cmp v0.5.4 // indirect
 	github.com/gorilla/mux v1.8.0
+	github.com/gorilla/websocket v1.4.2
 	github.com/jinzhu/gorm v1.9.16
 	github.com/joho/godotenv v1.3.0
 	github.com/mattn/go-sqlite3 v1.14.6 // indirect

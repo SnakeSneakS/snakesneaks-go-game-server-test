@@ -2,8 +2,9 @@ package api
 
 import (
 	"net/http"
-	"snakesneaks-go-server-2021-8/m/handler/api/auth"
-	"snakesneaks-go-server-2021-8/m/handler/api/game"
+
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/handler/api/auth"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/handler/api/game"
 
 	"github.com/gorilla/mux"
 )

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SampleScene : MonoBehaviour
+public class HttpPostTestScene : MonoBehaviour
 {
     [Header("Show Host Uri")]
     [SerializeField] ButtonTextPair DebugHostUriButtonTextPair;
@@ -92,12 +92,7 @@ public class SampleScene : MonoBehaviour
         }
 
         Signup_RequestButtonTextPair.result.text = "Send data...";
-        StartCoroutine(httpAuthClient.Signup(m_user));
-
-        while (!httpAuthClient.www.isDone)
-        {
-            continue;
-        }
+        yield return StartCoroutine(httpAuthClient.Signup(m_user));
 
         if (httpAuthClient.www.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
         {

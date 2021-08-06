@@ -2,9 +2,10 @@ package auth
 
 import (
 	"net/http"
-	"snakesneaks-go-server-2021-8/m/handler/api/auth/login"
-	"snakesneaks-go-server-2021-8/m/handler/api/auth/logout"
-	"snakesneaks-go-server-2021-8/m/handler/api/auth/signup"
+
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/handler/api/auth/login"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/handler/api/auth/logout"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/handler/api/auth/signup"
 
 	"github.com/gorilla/mux"
 )

@@ -8,8 +8,9 @@ import (
 	"io"
 	"log"
 	"math/big"
-	"snakesneaks-go-server-2021-8/m/service/model"
 	"time"
+
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/model"
 )
 
 var SessionData = map[string]sessionInf{} //userIDm sessionID,

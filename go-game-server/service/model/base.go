@@ -1,7 +1,7 @@
 package model
 
 import (
-	"snakesneaks-go-server-2021-8/m/service/model/mysql"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/model/mysql"
 )
 
 //StartDB initialization to load env and migrate db

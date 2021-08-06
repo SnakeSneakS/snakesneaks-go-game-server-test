@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"snakesneaks-go-server-2021-8/m/service/auth"
-	"snakesneaks-go-server-2021-8/m/service/model"
 	"time"
+
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/auth"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/model"
 )
 
 // Handler handle request to game
