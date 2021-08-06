@@ -19,12 +19,18 @@
       <td>ID</td>
       <td>名前</td>
       <td>メールアドレス</td>
+      <td>Password</td>
+      <td>CreatedAt</td>
+      <td>UpdatedAt</td>
     </tr>
     {{ range .users }}
       <tr>
         <td>{{ .ID }}</td>
-        <td>{{ .Name }}</td>
+        <td>{{ .Username }}</td>
         <td>{{ .Email }}</td>
+        <td>{{ .Password }}</td>
+        <td>{{ .CreatedAt }}</td>
+        <td>{{ .UpdatedAt }}</td>
         <td>
           <form method="post" action="/delete/{{.ID}}">
             <button type="submit">削除</button>
@@ -32,10 +38,10 @@
         </td>
       </tr>
     {{ end }}
-  </ul>
+  </table>
   </div>
   
-
+  <br><hr><br>
   <div>
     <h2><a href="sign-in.html">自作ユーザー一覧</a></h2>
   <table>
@@ -44,13 +50,17 @@
       <td>名前</td>
       <td>メールアドレス</td>
       <td>Password</td>
+      <td>CreatedAt</td>
+      <td>UpdatedAt</td>
     </tr>
     {{ range .userDatas }}
       <tr>
         <td>{{ .ID }}</td>
-        <td>{{ .Name }}</td>
+        <td>{{ .Username }}</td>
         <td>{{ .Email }}</td>
         <td>{{ .Password }}</td>
+        <td>{{ .CreatedAt }}</td>
+        <td>{{ .DeletedAt }}</td>
         <td>
           <form method="post" action="/delete-userData">
             <button type="submit">全て削除</button>
@@ -58,7 +68,7 @@
         </td>
       </tr>
     {{ end }}
-  </ul>
+  </table>
   </div>
   
 

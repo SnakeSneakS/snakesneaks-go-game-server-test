@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -15,17 +14,12 @@ import (
 
 //User is a user
 type User struct {
-	gorm.Model
-	Name  string
-	Email string
-}
-
-//UserData is a Account Data
-type UserData struct { //dbの内容変えた時には、db作り直し。(dashbordでゴミ箱マークで消す→docker volume ls→表示されたdbを消す docker volume rm {名前})
-	gorm.Model
-	Name     string `form:"name" binding:"required" gorm:"unique;not null"`
-	Email    string `form:"email" binding:"required" gorm:"unique;not null"`
-	Password string `form:"password" binding:"required"`
+	ID        uint64    `gorm:"column:id;primaryKey;" json:"id"`
+	Username  string    `gorm:"column:username;type:varchar(255);" json:"username"`
+	Email     string    `gorm:"column:email;type:varchar(255);unique;" json:"email"`
+	Password  string    `gorm:"column:password;type:varchar(255);" json:"password"`
+	CreatedAt time.Time `gorm:"column:createdAt;type:datetime;default:current_timestamp;"`
+	UpdatedAt time.Time `gorm:"column:updatedAt;type:datetime;"`
 }
 
 func main() {
@@ -40,7 +34,6 @@ func main() {
 	//database接続
 	db := sqlConnect()
 	db.AutoMigrate(&User{})
-	db.AutoMigrate(&UserData{})
 	defer db.Close() //実行が終わったらdb.Close
 	//DELETE ALL
 	//db.Delete(&User{})
@@ -53,95 +46,95 @@ func main() {
 	router.GET("/", func(ctx *gin.Context) {
 		db := sqlConnect()
 		var users []User
-		var userDatas []UserData
 		db.Order("created_at asc").Find(&users)
-		db.Order("created_at asc").Find(&userDatas)
 		defer db.Close()
 
 		ctx.HTML(200, "index.html", gin.H{
-			"users":     users,
-			"userDatas": userDatas,
+			"users": users,
 		})
 	})
 
-	//sign-in
-	router.GET("/sign-in.html", func(ctx *gin.Context) {
-		ctx.HTML(200, "sign-in.html", gin.H{
-			"error": "",
+	/*
+		//sign-in
+		router.GET("/sign-in.html", func(ctx *gin.Context) {
+			ctx.HTML(200, "sign-in.html", gin.H{
+				"error": "",
+			})
 		})
-	})
 
-	router.POST("/sign-in", func(ctx *gin.Context) {
-		db := sqlConnect()
-		name := ctx.PostForm("name")
-		email := ctx.PostForm("email")
-		password := ctx.PostForm("password")
+		router.POST("/sign-in", func(ctx *gin.Context) {
+			db := sqlConnect()
+			name := ctx.PostForm("name")
+			email := ctx.PostForm("email")
+			password := ctx.PostForm("password")
 
-		userData := &UserData{Name: name, Password: password, Email: email}
-
-		/*
-			if check := db.Where("Name = ?", name).First(&userData); check.Error != nil {
-				fmt.Println("already exist user " + name + "with email " + email)
-				ctx.HTML(200, "sign-in.html", gin.H{
-					"error": "already existing email",
-				})
-			} else {
-				db.Create(&userData)
-				fmt.Println("create user " + name + "with email " + email)
-				ctx.Redirect(302, "/")
-			}*/
-
-		//UNIQUEのやり方が分からない！！！errに必ずなる！？
-		result := db.Create(&userData)
-		defer db.Close()
-		if result.Error != nil {
+			userData := &UserData{Name: name, Password: password, Email: email}
+	*/
+	/*
+		if check := db.Where("Name = ?", name).First(&userData); check.Error != nil {
 			fmt.Println("already exist user " + name + "with email " + email)
 			ctx.HTML(200, "sign-in.html", gin.H{
-				"error": "this account already exsist(name and email is unique)",
+				"error": "already existing email",
 			})
 		} else {
+			db.Create(&userData)
 			fmt.Println("create user " + name + "with email " + email)
 			ctx.Redirect(302, "/")
-		}
+		}*/
+	/*
+			//UNIQUEのやり方が分からない！！！errに必ずなる！？
+			result := db.Create(&userData)
+			defer db.Close()
+			if result.Error != nil {
+				fmt.Println("already exist user " + name + "with email " + email)
+				ctx.HTML(200, "sign-in.html", gin.H{
+					"error": "this account already exsist(name and email is unique)",
+				})
+			} else {
+				fmt.Println("create user " + name + "with email " + email)
+				ctx.Redirect(302, "/")
+			}
 
-	})
+		})
 
-	router.POST("/delete-userData", func(ctx *gin.Context) {
-		db := sqlConnect()
+		router.POST("/delete-userData", func(ctx *gin.Context) {
+			db := sqlConnect()
 
-		var userData UserData
-		db.Debug().Delete(&userData)
-		defer db.Close()
+			var userData UserData
+			db.Debug().Delete(&userData)
+			defer db.Close()
 
-		ctx.Redirect(302, "/")
-	})
+			ctx.Redirect(302, "/")
+		})
 
-	router.POST("/new", func(ctx *gin.Context) {
-		db := sqlConnect()
-		name := ctx.PostForm("name")
-		email := ctx.PostForm("email")
-		fmt.Println("create user " + name + "with email " + email)
-		db.Create(&User{Name: name, Email: email})
-		defer db.Close()
-		ctx.Redirect(302, "/")
-	})
+		router.POST("/new", func(ctx *gin.Context) {
+			db := sqlConnect()
+			name := ctx.PostForm("name")
+			email := ctx.PostForm("email")
+			fmt.Println("create user " + name + "with email " + email)
+			db.Create(&User{Username: name, Email: email})
+			defer db.Close()
+			ctx.Redirect(302, "/")
+		})
 
-	router.POST("/delete/:id", func(ctx *gin.Context) {
-		db := sqlConnect()
-		n := ctx.Param("id")
-		id, err := strconv.Atoi(n)
-		if err != nil {
-			panic("id is not a number")
-		}
-		var user User
-		db.First(&user, id)
-		db.Delete(&user)
-		defer db.Close()
+		router.POST("/delete/:id", func(ctx *gin.Context) {
+			db := sqlConnect()
+			n := ctx.Param("id")
+			id, err := strconv.Atoi(n)
+			if err != nil {
+				panic("id is not a number")
+			}
+			var user User
+			db.First(&user, id)
+			db.Delete(&user)
+			defer db.Close()
 
-		ctx.Redirect(302, "/")
-	})
+			ctx.Redirect(302, "/")
+		})
+	*/
 
 	router.Run(fmt.Sprintf(":%s", os.Getenv("GO_WEB_SERVER_PORT")))
+
 }
 
 func sqlConnect() (database *gorm.DB) {
