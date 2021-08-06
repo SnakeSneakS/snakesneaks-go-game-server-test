@@ -80,7 +80,7 @@ public class HttpPostTestScene : MonoBehaviour
     /// <returns></returns>
     IEnumerator SignupRequest()
     {
-        HttpAuthClient httpAuthClient = new HttpAuthClient(Model.signupUri);
+        HttpAuthClient httpAuthClient = new HttpAuthClient();
 
         m_user = new Model.User(Signup_UsernameInputField.text, Signup_EmailInputField.text, Signup_PasswordInputField.text);
         Debug.Log($"~SendData~ \n username: {m_user.Username}, email: {m_user.Email}, password: {m_user.Password}");
@@ -122,7 +122,7 @@ public class HttpPostTestScene : MonoBehaviour
     /// <returns></returns>
     IEnumerator LoginRequest()
     {
-        HttpAuthClient httpAuthClient = new HttpAuthClient(Model.loginUri);
+        HttpAuthClient httpAuthClient = new HttpAuthClient();
 
         m_user = new Model.User(Login_UsernameInputField.text, Login_EmailInputField.text, Login_PasswordInputField.text);
         Debug.Log($"~SendData~ \n username: {m_user.Username}, email: {m_user.Email}, password: {m_user.Password}");
@@ -169,7 +169,7 @@ public class HttpPostTestScene : MonoBehaviour
     /// <returns></returns>
     IEnumerator LogoutRequest()
     {
-        HttpAuthClient httpAuthClient = new HttpAuthClient(Model.logoutUri);
+        HttpAuthClient httpAuthClient = new HttpAuthClient();
 
         m_session = new Model.Session(Logout_UserIdInputField.text,Logout_SessionIdInputField.text);
         Debug.Log($"~SendData~ \n user_id: {m_session.UserID}, session_id: {m_session.SessionID}");

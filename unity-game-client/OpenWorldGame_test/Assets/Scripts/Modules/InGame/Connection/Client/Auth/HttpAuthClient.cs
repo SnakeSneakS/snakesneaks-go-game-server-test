@@ -7,12 +7,10 @@ using UnityEngine.Networking;
 //Client: Http Authentication 
 public class HttpAuthClient 
 {
-    private Uri targetUri;
     public UnityWebRequest www;
 
-    public HttpAuthClient(Uri targetUri)
+    public HttpAuthClient()
     {
-        this.targetUri = targetUri;
         this.www =null;
     }
 
@@ -31,7 +29,7 @@ public class HttpAuthClient
 
 
         byte[] postData = System.Text.Encoding.UTF8.GetBytes("{\"user\":" + JsonUtility.ToJson(user) + "}");
-        www = new UnityWebRequest(targetUri, "Post");
+        www = new UnityWebRequest(Model.signupUri, "Post");
         www.uploadHandler = (UploadHandler)new UploadHandlerRaw(postData);
         www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         www.SetRequestHeader("Content-Type", "application/json");
@@ -72,7 +70,7 @@ public class HttpAuthClient
         }
 
         byte[] postData = System.Text.Encoding.UTF8.GetBytes("{\"user\":" + JsonUtility.ToJson(user) + "}");
-        www = new UnityWebRequest(targetUri, "Post");
+        www = new UnityWebRequest(Model.loginUri, "Post");
         www.uploadHandler = (UploadHandler)new UploadHandlerRaw(postData);
         www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         www.SetRequestHeader("Content-Type", "application/json");
@@ -113,7 +111,7 @@ public class HttpAuthClient
         }
 
         byte[] postData = System.Text.Encoding.UTF8.GetBytes("{\"session\":" + JsonUtility.ToJson(session) + "}");
-        www = new UnityWebRequest(targetUri, "Post");
+        www = new UnityWebRequest(Model.logoutUri, "Post");
         www.uploadHandler = (UploadHandler)new UploadHandlerRaw(postData);
         www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         www.SetRequestHeader("Content-Type", "application/json");
