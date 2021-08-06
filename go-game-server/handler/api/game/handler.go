@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/game"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/game"
 )
 
 // Handler handle request to game

@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/core"
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/model"
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/model/mysql"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/core"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/mysql"
 
 	"gorm.io/gorm"
 )

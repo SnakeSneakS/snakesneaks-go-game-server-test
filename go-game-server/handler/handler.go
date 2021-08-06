@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/handler/api"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api"
 
 	"github.com/gorilla/mux"
 )

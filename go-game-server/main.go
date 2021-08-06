@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/server"
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/model"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/server"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
 )
 
 func main() {

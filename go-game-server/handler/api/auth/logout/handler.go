@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/auth"
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/model"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/auth"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
 )
 
 // Handler handle request to game

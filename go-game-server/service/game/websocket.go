@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/model"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
 
 	"github.com/gorilla/websocket"
 )

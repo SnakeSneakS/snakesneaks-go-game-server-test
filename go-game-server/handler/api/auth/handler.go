@@ -3,9 +3,9 @@ package auth
 import (
 	"net/http"
 
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/handler/api/auth/login"
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/handler/api/auth/logout"
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/handler/api/auth/signup"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/auth/login"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/auth/logout"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/auth/signup"
 
 	"github.com/gorilla/mux"
 )

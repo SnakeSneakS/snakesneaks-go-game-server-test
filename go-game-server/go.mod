@@ -1,4 +1,4 @@
-module github.com/snakesneaks/snakesneaks-go-game-server-test/g
+module github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server
 
 go 1.16
 

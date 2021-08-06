@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/handler"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler"
 
 	"github.com/joho/godotenv"
 )

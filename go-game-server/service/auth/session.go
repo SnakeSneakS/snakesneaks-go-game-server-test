@@ -10,7 +10,7 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/g/service/model"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
 )
 
 var SessionData = map[string]sessionInf{} //userIDm sessionID,
