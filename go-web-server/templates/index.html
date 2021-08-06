@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Sample App</title>
+</head>
+<body>
+  <h2>ユーザー追加</h2>
+  <form method="post" action="/new">
+    <p>名前<input type="text" name="name" size="30" placeholder="入力してください" required></p>
+    <p>メールアドレス<input type="email" name="email" size="30" placeholder="入力してください" required></p>
+    <p><input type="submit" value="Send"></p>
+  </form>
+
+  <div>
+    <h2>ユーザー一覧</h2>
+  <table>
+    <tr>
+      <td>ID</td>
+      <td>名前</td>
+      <td>メールアドレス</td>
+    </tr>
+    {{ range .users }}
+      <tr>
+        <td>{{ .ID }}</td>
+        <td>{{ .Name }}</td>
+        <td>{{ .Email }}</td>
+        <td>
+          <form method="post" action="/delete/{{.ID}}">
+            <button type="submit">削除</button>
+          </form>
+        </td>
+      </tr>
+    {{ end }}
+  </ul>
+  </div>
+  
+
+  <div>
+    <h2><a href="sign-in.html">自作ユーザー一覧</a></h2>
+  <table>
+    <tr>
+      <td>ID</td>
+      <td>名前</td>
+      <td>メールアドレス</td>
+      <td>Password</td>
+    </tr>
+    {{ range .userDatas }}
+      <tr>
+        <td>{{ .ID }}</td>
+        <td>{{ .Name }}</td>
+        <td>{{ .Email }}</td>
+        <td>{{ .Password }}</td>
+        <td>
+          <form method="post" action="/delete-userData">
+            <button type="submit">全て削除</button>
+          </form>
+        </td>
+      </tr>
+    {{ end }}
+  </ul>
+  </div>
+  
+
+  </body>
+</html>

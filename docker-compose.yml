@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  go-game-server:
+    build: ./go-game-server # Dockerfile
+    container_name: go-game-server
+    tty: true #コンテナの起動永続化
+    volumes:
+      - ./go-game-server:/go/src/api
+    ports:
+      - ${GO_GAME_SERVER_PORT}:${GO_GAME_SERVER_PORT}
+    restart: always
+    depends_on: 
+      - "mysql"
+    #command: /bin/sh -c "go run main.go"
+  go-web-server: #サービス名
+    build: ./go-web-server 
+    container_name: go-web-server 
+    #stdin_open: true 
+    tty: true #コンテナ起動永続化 
+    volumes: 
+      - ./go-web-server:/go/web # マウントディレクトリ指定 
+    ports:  
+      - ${GO_WEB_SERVER_PORT}:${GO_WEB_SERVER_PORT} 
+    depends_on: 
+      - "mysql"
+  mysql: 
+    image: mysql:5.7 
+    container_name: ${MYSQL_CONTAINER_NAME} 
+    volumes:  
+      - ./db-mysql/my.conf:/etc/mysql/conf.d/my.cnf 
+      - ./db-mysql/mysql:/var/lib/mysql 
+      - ./log/db-mysql:/var/log/mysql 
+    ports: 
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - TZ=&{MYSQL_TIMEZONE}
