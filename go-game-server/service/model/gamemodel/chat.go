@@ -1,5 +1,5 @@
 package gamemodel
 
-type ChatReq struct {
-	Text string `json:"text"`
+type Chat struct {
+	Text string `json:"text,string"`
 }

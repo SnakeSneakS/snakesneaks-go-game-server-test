@@ -10,7 +10,7 @@ public partial class Model
     const string signupPath = "api/auth/signup";
     const string loginPath = "api/auth/login";
     const string logoutPath = "api/auth/logout";
-    const string gamePath = "api/game";
+    const string gamePath = "api/game/websocket";
 
     public static readonly Uri hostUri = new Uri($"{hostname}:{port}");
     public static readonly Uri signupUri = new Uri( $"{hostname}:{port}/{signupPath}");

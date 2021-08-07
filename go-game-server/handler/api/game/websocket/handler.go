@@ -1,10 +1,10 @@
-package game
+package websocket
 
 import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/game/websocket"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/game"
 )
 
 // Handler handle request to game
@@ -14,11 +14,7 @@ type Handler struct {
 
 // NewHandler instantiate
 func NewHandler() *Handler {
-	h := &Handler{
-		r: mux.NewRouter(),
-	}
-
-	h.r.Handle("/websocket{?:/?.*}", http.StripPrefix("/websocket", websocket.NewHandler()))
+	h := &Handler{}
 
 	return h
 }
@@ -27,5 +23,5 @@ func NewHandler() *Handler {
 WEB SOCKET CONNECTION
 */
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.r.ServeHTTP(w, r)
+	game.HandleWebSocket(w, r)
 }
