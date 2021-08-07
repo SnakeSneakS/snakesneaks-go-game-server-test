@@ -2,8 +2,10 @@ package api
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/auth"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/debug"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/game"
 
 	"github.com/gorilla/mux"
@@ -25,7 +27,9 @@ func NewHandler() *Handler {
 
 	h.r.Handle("/auth{?:/?.*}", http.StripPrefix("/auth", auth.NewHandler()))
 	h.r.Handle("/game{?:/?.*}", http.StripPrefix("/game", game.NewHandler()))
-
+	if os.Getenv("DEBUG_MODE") == "True" {
+		h.r.Handle("/debug{?:/?.*}", http.StripPrefix("/debug", debug.NewHandler()))
+	}
 	return h
 }
 

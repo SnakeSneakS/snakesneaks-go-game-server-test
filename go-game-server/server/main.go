@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler"
-
+	"github.com/fatih/color"
 	"github.com/joho/godotenv"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler"
 )
 
 //LoadENV load env from {path} (e.g. ./env)
@@ -22,6 +22,12 @@ func LoadENV(path string) {
 
 //RunServer up server
 func RunServer() {
+	if os.Getenv("DEBUG_MODE") == "True" {
+		color.Blue("This is DEBUG MODE")
+	} else {
+		color.Blue("This is \"not\" DEBUG MODE")
+	}
+
 	// create handle
 	h, err := handler.NewHandler()
 	if err != nil {

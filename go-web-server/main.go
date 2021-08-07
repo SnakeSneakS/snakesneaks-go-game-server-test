@@ -1,31 +1,28 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
-	"strconv"
 	"time"
 
+	"github.com/fatih/color"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
+
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/auth"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
 )
 
-//User is a user
-type User struct {
-	gorm.Model
-	Name  string
-	Email string
-}
-
-//UserData is a Account Data
-type UserData struct { //dbの内容変えた時には、db作り直し。(dashbordでゴミ箱マークで消す→docker volume ls→表示されたdbを消す docker volume rm {名前})
-	gorm.Model
-	Name     string `form:"name" binding:"required" gorm:"unique;not null"`
-	Email    string `form:"email" binding:"required" gorm:"unique;not null"`
-	Password string `form:"password" binding:"required"`
+//SessionData is a session data
+type SessionData struct {
+	UserID     string          `json:"user_id"`
+	SessionInf auth.SessionInf `json:"sesson_inf"`
 }
 
 func main() {
@@ -37,10 +34,15 @@ func main() {
 		panic("failed to read .env file")
 	}
 
+	if os.Getenv("DEBUG_MODE") == "True" {
+		color.Blue("This is DEBUG MODE")
+	} else {
+		color.Blue("This is \"not\" DEBUG MODE")
+	}
+
 	//database接続
 	db := sqlConnect()
-	db.AutoMigrate(&User{})
-	db.AutoMigrate(&UserData{})
+	db.AutoMigrate(&model.User{})
 	defer db.Close() //実行が終わったらdb.Close
 	//DELETE ALL
 	//db.Delete(&User{})
@@ -51,97 +53,92 @@ func main() {
 	router.LoadHTMLGlob("templates/*.html")
 
 	router.GET("/", func(ctx *gin.Context) {
+		//User
 		db := sqlConnect()
-		var users []User
-		var userDatas []UserData
-		db.Order("created_at asc").Find(&users)
-		db.Order("created_at asc").Find(&userDatas)
+		var users []model.User
+		db.Order("createdAt asc").Find(&users)
 		defer db.Close()
 
+		//Session
+		hostname := os.Getenv("GO_GAME_SERVER_CONTAINER_NAME")
+		res, err := http.Get(fmt.Sprintf("http://%s:%s/api/debug/session", hostname, os.Getenv("GO_GAME_SERVER_PORT")))
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer res.Body.Close()
+		if res.StatusCode != 200 {
+			fmt.Printf("StatusCode=%d\n", res.StatusCode)
+			return
+		}
+		decoder := json.NewDecoder(res.Body)
+		var mapData map[string]auth.SessionInf
+		if err := decoder.Decode(&mapData); err != nil {
+			log.Println("Failed to decode sessionData: ", err)
+		}
+		log.Print(mapData)
+		sessionData := make([]SessionData, 0)
+		for k, v := range mapData {
+			s := SessionData{
+				UserID:     k,
+				SessionInf: v,
+			}
+			sessionData = append(sessionData, s)
+		}
+		log.Print(sessionData)
 		ctx.HTML(200, "index.html", gin.H{
-			"users":     users,
-			"userDatas": userDatas,
+			"users":       users,
+			"sessionData": sessionData,
 		})
+		return
 	})
 
-	//sign-in
-	router.GET("/sign-in.html", func(ctx *gin.Context) {
-		ctx.HTML(200, "sign-in.html", gin.H{
-			"error": "",
-		})
-	})
-
-	router.POST("/sign-in", func(ctx *gin.Context) {
-		db := sqlConnect()
-		name := ctx.PostForm("name")
+	router.POST("/signup", func(ctx *gin.Context) {
+		username := ctx.PostForm("username")
 		email := ctx.PostForm("email")
 		password := ctx.PostForm("password")
+		hostname := os.Getenv("GO_GAME_SERVER_CONTAINER_NAME")
 
-		userData := &UserData{Name: name, Password: password, Email: email}
-
-		/*
-			if check := db.Where("Name = ?", name).First(&userData); check.Error != nil {
-				fmt.Println("already exist user " + name + "with email " + email)
-				ctx.HTML(200, "sign-in.html", gin.H{
-					"error": "already existing email",
-				})
-			} else {
-				db.Create(&userData)
-				fmt.Println("create user " + name + "with email " + email)
-				ctx.Redirect(302, "/")
-			}*/
-
-		//UNIQUEのやり方が分からない！！！errに必ずなる！？
-		result := db.Create(&userData)
-		defer db.Close()
-		if result.Error != nil {
-			fmt.Println("already exist user " + name + "with email " + email)
-			ctx.HTML(200, "sign-in.html", gin.H{
-				"error": "this account already exsist(name and email is unique)",
-			})
-		} else {
-			fmt.Println("create user " + name + "with email " + email)
-			ctx.Redirect(302, "/")
-		}
-
-	})
-
-	router.POST("/delete-userData", func(ctx *gin.Context) {
-		db := sqlConnect()
-
-		var userData UserData
-		db.Debug().Delete(&userData)
-		defer db.Close()
-
-		ctx.Redirect(302, "/")
-	})
-
-	router.POST("/new", func(ctx *gin.Context) {
-		db := sqlConnect()
-		name := ctx.PostForm("name")
-		email := ctx.PostForm("email")
-		fmt.Println("create user " + name + "with email " + email)
-		db.Create(&User{Name: name, Email: email})
-		defer db.Close()
-		ctx.Redirect(302, "/")
-	})
-
-	router.POST("/delete/:id", func(ctx *gin.Context) {
-		db := sqlConnect()
-		n := ctx.Param("id")
-		id, err := strconv.Atoi(n)
+		b, err := json.Marshal(model.UserReq{User: model.User{Username: username, Email: email, Password: password}})
+		fmt.Printf("Send Data: \n%s", b)
+		bb := bytes.NewBuffer(b)
+		res, err := http.Post(fmt.Sprintf("http://%s:%s/api/auth/signup", hostname, os.Getenv("GO_GAME_SERVER_PORT")), "application/json", bb)
 		if err != nil {
-			panic("id is not a number")
+			log.Fatal(err)
 		}
-		var user User
-		db.First(&user, id)
-		db.Delete(&user)
-		defer db.Close()
+		defer res.Body.Close()
+		if res.StatusCode != 200 {
+			fmt.Printf("StatusCode=%d\n", res.StatusCode)
+			return
+		}
 
 		ctx.Redirect(302, "/")
 	})
 
+	/*
+		router.POST("/delete/:id", func(ctx *gin.Context) {
+			db := sqlConnect()
+
+			n := ctx.Param("id")
+			id, err := strconv.Atoi(n)
+			if err != nil {
+				panic("id is not a number")
+			}
+			var user User
+			db.First(&user, id)
+			db.Delete(&user)
+			defer db.Close()
+
+			ctx.Redirect(302, "/")
+		})
+	*/
+
+	//run when DEBUG_MODE
+	if os.Getenv("DEBUG_MODE") != "True" {
+		log.Fatal("router don't run because this is not debug mode!")
+		return
+	}
 	router.Run(fmt.Sprintf(":%s", os.Getenv("GO_WEB_SERVER_PORT")))
+
 }
 
 func sqlConnect() (database *gorm.DB) {

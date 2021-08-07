@@ -13,17 +13,17 @@ import (
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
 )
 
-var SessionData = map[string]sessionInf{} //userIDm sessionID,
+var SessionData = map[string]SessionInf{} //userIDm sessionID,
 
 const (
 	sessionIDsize        = 32
 	sessionExpireSeconds = 604800 //604800[s]=1[week], int64
 )
 
-//sessionInf is a information of session linked by "userID"
-type sessionInf struct {
-	sessionID string    //session id
-	updated   time.Time //last updated time
+//SessionInf is a information of session linked by "userID"
+type SessionInf struct {
+	SessionID string    `json:"session_id"` //session id
+	Updated   time.Time `json:"updated"`    //last updated time
 }
 
 //NewSession creates and save new session
@@ -40,16 +40,16 @@ func NewSession(ctx context.Context, userID string) (string, error) {
 }
 
 //check of session is expired
-func checkExpire(sessionInf sessionInf) error {
-	if time.Since(sessionInf.updated).Seconds() > sessionExpireSeconds {
+func checkExpire(sessionInf SessionInf) error {
+	if time.Since(sessionInf.Updated).Seconds() > sessionExpireSeconds {
 		return errors.New("session expire")
 	}
 	return nil
 }
 
 //update session time
-func updateSession(s sessionInf) {
-	s.updated = time.Now()
+func updateSession(s SessionInf) {
+	s.Updated = time.Now()
 }
 
 // generateRandomString create random string as sessionID
@@ -74,14 +74,14 @@ func GetSessionData(ctx context.Context, userID string) (string, error) {
 		return "", errors.New("Session Data Not Found")
 	}
 	updateSession(session)
-	return session.sessionID, nil
+	return session.SessionID, nil
 }
 
 //setSessionData set session to redis database (login)
 func setSessionData(ctx context.Context, userID string, sessionID string) error {
-	m_sessionInf := sessionInf{
-		sessionID: sessionID,
-		updated:   time.Now(),
+	m_sessionInf := SessionInf{
+		SessionID: sessionID,
+		Updated:   time.Now(),
 	}
 	SessionData[userID] = m_sessionInf
 	return nil
@@ -104,8 +104,8 @@ func CheckSession(ctx context.Context, userID string, sessionID string) error {
 	}
 	updateSession(session)
 
-	if session.sessionID != sessionID {
-		log.Printf("mis-match session: userID(%s), sessionID(%s), storedSessionID(%s)", userID, sessionID, session.sessionID)
+	if session.SessionID != sessionID {
+		log.Printf("mis-match session: userID(%s), sessionID(%s), storedSessionID(%s)", userID, sessionID, session.SessionID)
 		return errors.New("session id mismatch")
 	}
 	log.Printf("right match session: userID(%s), sessionID(%s)", userID, sessionID)
@@ -115,7 +115,7 @@ func CheckSession(ctx context.Context, userID string, sessionID string) error {
 //DeleteAllExpiredSessions delete all sessions expired
 func DeleteAllExpiredSessions() {
 	for k, v := range SessionData {
-		if time.Since(v.updated).Seconds() > sessionExpireSeconds {
+		if time.Since(v.Updated).Seconds() > sessionExpireSeconds {
 			delete(SessionData, k)
 		}
 	}

@@ -3,7 +3,7 @@ version: '3'
 services:
   go-game-server:
     build: ./go-game-server # Dockerfile
-    container_name: go-game-server
+    container_name: ${GO_GAME_SERVER_CONTAINER_NAME}
     tty: true #コンテナの起動永続化
     volumes:
       - ./go-game-server:/go/src/api
@@ -15,7 +15,7 @@ services:
     #command: /bin/sh -c "go run main.go"
   go-web-server: #サービス名
     build: ./go-web-server 
-    container_name: go-web-server 
+    container_name: ${GO_WEB_SERVER_CONTAINER_NAME}
     #stdin_open: true 
     tty: true #コンテナ起動永続化 
     volumes: 

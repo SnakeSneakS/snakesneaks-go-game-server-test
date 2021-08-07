@@ -1,9 +1,17 @@
 package model
 
+import "time"
+
 //Session session
 type Session struct {
 	UserID    string `json:"user_id"`    //redis key
 	SessionID string `json:"session_id"` //redis value
+}
+
+//SessionInf is a information of session linked by "userID"
+type SessionInf struct {
+	SessionID string    `json:"session_id"` //session id
+	Updated   time.Time `json:"updated"`    //last updated time
 }
 
 const (
