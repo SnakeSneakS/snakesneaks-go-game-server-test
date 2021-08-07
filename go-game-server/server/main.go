@@ -9,6 +9,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/joho/godotenv"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/auth"
 )
 
 //LoadENV load env from {path} (e.g. ./env)
@@ -34,6 +35,9 @@ func RunServer() {
 		log.Fatalln("Failed to initialize root handler ", err)
 		return
 	}
+
+	// session management
+	auth.StartSessionManegement()
 
 	// listen
 	log.Println("Server started")

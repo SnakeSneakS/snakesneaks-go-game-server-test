@@ -13,17 +13,38 @@ import (
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
 )
 
-var SessionData = map[string]SessionInf{} //userIDm sessionID,
+var SessionData map[string]SessionInf
 
 const (
 	sessionIDsize        = 32
 	sessionExpireSeconds = 604800 //604800[s]=1[week], int64
+
+	sessionManegementRoutineSeconds = 10
 )
 
 //SessionInf is a information of session linked by "userID"
 type SessionInf struct {
 	SessionID string    `json:"session_id"` //session id
 	Updated   time.Time `json:"updated"`    //last updated time
+}
+
+//StartSessionManegement manage session
+func StartSessionManegement() {
+	SessionData = map[string]SessionInf{}
+
+	go func() {
+		for {
+			log.Println("Session expire check...")
+			for userID, sessionInf := range SessionData {
+				if err := checkSessionExpire(sessionInf); err != nil {
+					if err := deleteSessionData(userID); err != nil {
+						log.Println(err)
+					}
+				}
+			}
+			time.Sleep(time.Second * sessionManegementRoutineSeconds)
+		}
+	}()
 }
 
 //NewSession creates and save new session
@@ -40,7 +61,7 @@ func NewSession(ctx context.Context, userID string) (string, error) {
 }
 
 //check of session is expired
-func checkExpire(sessionInf SessionInf) error {
+func checkSessionExpire(sessionInf SessionInf) error {
 	if time.Since(sessionInf.Updated).Seconds() > sessionExpireSeconds {
 		return errors.New("session expire")
 	}
@@ -87,8 +108,8 @@ func setSessionData(ctx context.Context, userID string, sessionID string) error 
 	return nil
 }
 
-//DeleteSessionData delete session (logout)
-func DeleteSessionData(ctx context.Context, userID string) error {
+//deleteSessionData delete session (logout)
+func deleteSessionData(userID string) error {
 	delete(SessionData, userID)
 
 	log.Printf("delete session: key(%s)", userID)
@@ -126,7 +147,6 @@ func DeleteAllExpiredSessions() {
 //MOJULE
 //DeleteSessionHTTP check session from http request and return if session is not there
 func DeleteSessionHTTP(r io.Reader) error {
-	ctx := context.TODO()
 
 	//decode request body: JSON->struct SessionReq
 	decoder := json.NewDecoder(r)
@@ -137,7 +157,7 @@ func DeleteSessionHTTP(r io.Reader) error {
 	}
 
 	//delete fail
-	if err := DeleteSessionData(ctx, d.Session.UserID); err != nil {
+	if err := deleteSessionData(d.Session.UserID); err != nil {
 		return err
 	}
 
