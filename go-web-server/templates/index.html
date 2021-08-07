@@ -23,6 +23,7 @@
         <td>パスワード</td>
         <td>作成日</td>
         <td>更新日</td>
+        <td>delete</td>
       </tr>
       {{ range .users }}
         <tr>
@@ -50,18 +51,13 @@
       <tr>
         <td>UserID</td>
         <td>SessionID</td>
-        <td>Created</td>
+        <td>Updated</td>
       </tr>
       {{ range .sessionData }}
         <tr>
           <td>{{ .UserID }}</td>
           <td>{{ .SessionInf.SessionID }}</td>
-          <td>{{ .SessionInf.Created }}</td>
-          <td>
-            <form method="post" action="/delete/{{.ID}}">
-              <button type="submit">削除</button>
-            </form>
-          </td>
+          <td>{{ .SessionInf.Updated }}</td>
         </tr>
       {{ end }}
     </table>

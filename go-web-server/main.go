@@ -64,16 +64,25 @@ func main() {
 		res, err := http.Get(fmt.Sprintf("http://%s:%s/api/debug/session", hostname, os.Getenv("GO_GAME_SERVER_PORT")))
 		if err != nil {
 			log.Fatal(err)
+			ctx.HTML(200, "index.html", gin.H{
+				"users": users,
+			})
 		}
 		defer res.Body.Close()
 		if res.StatusCode != 200 {
 			fmt.Printf("StatusCode=%d\n", res.StatusCode)
+			ctx.HTML(200, "index.html", gin.H{
+				"users": users,
+			})
 			return
 		}
 		decoder := json.NewDecoder(res.Body)
 		var mapData map[string]auth.SessionInf
 		if err := decoder.Decode(&mapData); err != nil {
 			log.Println("Failed to decode sessionData: ", err)
+			ctx.HTML(200, "index.html", gin.H{
+				"users": users,
+			})
 		}
 		log.Print(mapData)
 		sessionData := make([]SessionData, 0)
