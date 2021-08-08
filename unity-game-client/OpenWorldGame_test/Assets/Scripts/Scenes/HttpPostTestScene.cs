@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(SignupWebClient))]
+[RequireComponent(typeof(LoginWebClient))]
+[RequireComponent(typeof(LogoutWebClient))]
 public class HttpPostTestScene : MonoBehaviour
 {
     [Header("Show Host Uri")]
@@ -25,7 +28,12 @@ public class HttpPostTestScene : MonoBehaviour
     [SerializeField] InputField Logout_SessionIdInputField;
     [SerializeField] ButtonTextPair Logout_RequestButtonTextPair;
 
-    
+
+    [Header("WebClient")]
+    [SerializeField] private SignupWebClient signupWebClient;
+    [SerializeField] private LoginWebClient loginWebClient;
+    [SerializeField] private LogoutWebClient logoutWebClient;
+
 
     Model.User m_user;
     Model.Session m_session;
@@ -55,10 +63,6 @@ public class HttpPostTestScene : MonoBehaviour
     /// </summary>
     private void SetUpButtonEvent()
     {
-        //DebugHostUri
-        DebugHostUriButtonTextPair.button.onClick.AddListener(() => {
-            DebugHostUriButtonTextPair.result.text = $"{Model.hostUri}";
-        });
         //Signup
         Signup_RequestButtonTextPair.button.onClick.AddListener(() => {
             StartCoroutine(SignupRequest());
@@ -80,41 +84,30 @@ public class HttpPostTestScene : MonoBehaviour
     /// <returns></returns>
     IEnumerator SignupRequest()
     {
-        HttpAuthClient httpAuthClient = new HttpAuthClient();
+        string username = Signup_UsernameInputField.text;
+        string email = Signup_EmailInputField.text;
+        string password = Signup_PasswordInputField.text;
+        signupWebClient.SetData(username, email, password);
+        yield return StartCoroutine(signupWebClient.Send());
 
-        m_user = new Model.User(Signup_UsernameInputField.text, Signup_EmailInputField.text, Signup_PasswordInputField.text);
-        Debug.Log($"~SendData~ \n username: {m_user.Username}, email: {m_user.Email}, password: {m_user.Password}");
-        Debug.Log($"~SendDataError~ \n Error?: {m_user.Error}");
-        if (m_user.Error)
+        //処理
+        if (signupWebClient.isSuccess == true && signupWebClient.isInProgress == false)
         {
-            Signup_RequestButtonTextPair.result.text = "Error Found in Request Data.";
-            yield break;
-        }
-
-        Signup_RequestButtonTextPair.result.text = "Send data...";
-        yield return StartCoroutine(httpAuthClient.Signup(m_user));
-
-        if (httpAuthClient.www.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
-        {
-            Signup_RequestButtonTextPair.result.text = $"Connection Failed: \n[{httpAuthClient.www.responseCode}] {httpAuthClient.www.error}";
-            yield break;
-        }
-
-        Signup_RequestButtonTextPair.result.text = httpAuthClient.www.downloadHandler.text;
-        Model.SessionRes sessionRes = JsonUtility.FromJson<Model.SessionRes>(httpAuthClient.www.downloadHandler.text);
-        if (sessionRes.status != Model.Status.failed.ToString())
-        {
-            m_session = new Model.Session(sessionRes.session.UserID, sessionRes.session.SessionID);
-            Signup_RequestButtonTextPair.result.text += "\n<color=blue>Signup Success!</color>";
+            //成功した時
+            //LoginWebClientはひとまずLoginResponseDataをdataに保存するとする 
+            SignupWebClient.SignupResponseData lrd = (SignupWebClient.SignupResponseData)signupWebClient.data;
+            Debug.Log($"ParsedResponseData: \nStatus: {lrd.status}, user_id: {lrd.session.user_id}, session_id: {lrd.session.session_id}");
+            Debug.Log(signupWebClient.message);
         }
         else
         {
-            m_session = new Model.Session();
-            Signup_RequestButtonTextPair.result.text += "\n<color=red>Signup Failed!</color>";
+            //失敗した時
+            Debug.Log(signupWebClient.message);
         }
 
-        yield break;
+        Signup_RequestButtonTextPair.result.text = signupWebClient.message;
     }
+
 
     /// <summary>
     /// Login Request
@@ -122,92 +115,58 @@ public class HttpPostTestScene : MonoBehaviour
     /// <returns></returns>
     IEnumerator LoginRequest()
     {
-        HttpAuthClient httpAuthClient = new HttpAuthClient();
+        string username = Login_UsernameInputField.text;
+        string email = Login_EmailInputField.text;
+        string password = Login_PasswordInputField.text;
+        loginWebClient.SetData(username, email, password);
+        yield return StartCoroutine(loginWebClient.Send());
 
-        m_user = new Model.User(Login_UsernameInputField.text, Login_EmailInputField.text, Login_PasswordInputField.text);
-        Debug.Log($"~SendData~ \n username: {m_user.Username}, email: {m_user.Email}, password: {m_user.Password}");
-        Debug.Log($"~SendDataError~ \n Error?: {m_user.Error}");
-        if (m_user.Error)
+        //処理
+        if (loginWebClient.isSuccess == true && loginWebClient.isInProgress == false)
         {
-            Login_RequestButtonTextPair.result.text = "Error Found in Request Data.";
-            yield break;
-        }
-
-        Login_RequestButtonTextPair.result.text = "Send data...";
-        StartCoroutine(httpAuthClient.Login(m_user));
-
-        while (!httpAuthClient.www.isDone)
-        {
-            continue;
-        }
-
-        if (httpAuthClient.www.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
-        {
-            Login_RequestButtonTextPair.result.text = $"Connection Failed: \n[{httpAuthClient.www.responseCode}] {httpAuthClient.www.error}";
-            yield break;
-        }
-
-        Login_RequestButtonTextPair.result.text= httpAuthClient.www.downloadHandler.text;
-        Model.SessionRes sessionRes = JsonUtility.FromJson<Model.SessionRes>(httpAuthClient.www.downloadHandler.text);
-        if (sessionRes.status != Model.Status.failed.ToString())
-        {
-            m_session = new Model.Session(sessionRes.session.UserID, sessionRes.session.SessionID);
-            Login_RequestButtonTextPair.result.text += "\n<color=blue>Login Success!</color>";
+            //成功した時
+            //LoginWebClientはひとまずLoginResponseDataをdataに保存するとする 
+            LoginWebClient.LoginResponseData lrd = (LoginWebClient.LoginResponseData)loginWebClient.data;
+            Debug.Log($"ParsedResponseData: \nStatus: {lrd.status}, user_id: {lrd.session.user_id}, session_id: {lrd.session.session_id}");
+            Debug.Log(loginWebClient.message);
         }
         else
         {
-            m_session = new Model.Session();
-            Login_RequestButtonTextPair.result.text += "\n<color=red>Login Failed!</color>";
+            //失敗した時
+            Debug.Log(loginWebClient.message);
         }
 
-        yield break;
+        Login_RequestButtonTextPair.result.text = loginWebClient.message;
     }
 
+    
     /// <summary>
     /// LogoutRequest 
     /// </summary>
     /// <returns></returns>
     IEnumerator LogoutRequest()
     {
-        HttpAuthClient httpAuthClient = new HttpAuthClient();
+        string session_id = Logout_SessionIdInputField.text;
+        string user_id = Logout_UserIdInputField.text;
+        logoutWebClient.SetData(user_id,session_id);
+        yield return StartCoroutine(logoutWebClient.Send());
 
-        m_session = new Model.Session(Logout_UserIdInputField.text,Logout_SessionIdInputField.text);
-        Debug.Log($"~SendData~ \n user_id: {m_session.UserID}, session_id: {m_session.SessionID}");
-        Debug.Log($"~SendDataError~ \n Error?: {m_session.Error}");
-        if (m_user.Error)
+        //処理
+        if (logoutWebClient.isSuccess == true && logoutWebClient.isInProgress == false)
         {
-            Logout_RequestButtonTextPair.result.text = "Error Found in Request Data.";
-            yield break;
-        }
-
-        Logout_RequestButtonTextPair.result.text = "Send data...";
-        StartCoroutine(httpAuthClient.Logout(m_session));
-
-        while (!httpAuthClient.www.isDone)
-        {
-            continue;
-        }
-
-        if (httpAuthClient.www.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
-        {
-            Logout_RequestButtonTextPair.result.text = $"Connection Failed: \n[{httpAuthClient.www.responseCode}] {httpAuthClient.www.error}";
-            yield break;
-        }
-
-        Logout_RequestButtonTextPair.result.text = httpAuthClient.www.downloadHandler.text;
-        Model.StatusRes statusRes = JsonUtility.FromJson<Model.StatusRes>(httpAuthClient.www.downloadHandler.text);
-        if (statusRes.status != Model.Status.failed.ToString())
-        {
-            Logout_RequestButtonTextPair.result.text += "\n<color=blue>Logout Success!</color>";
+            //成功した時
+            //LoginWebClientはひとまずLoginResponseDataをdataに保存するとする 
+            LogoutWebClient.LogoutResponseData lrd = (LogoutWebClient.LogoutResponseData)logoutWebClient.data;
+            Debug.Log($"ParsedResponseData: \nStatus: {lrd.status}");
+            Debug.Log(logoutWebClient.message);
         }
         else
         {
-            Logout_RequestButtonTextPair.result.text += "\n<color=red>Logout Failed!</color>";
+            //失敗した時
+            Debug.Log(logoutWebClient.message);
         }
 
-        yield break;
+        Logout_RequestButtonTextPair.result.text = logoutWebClient.message;
     }
-
-
 
 }

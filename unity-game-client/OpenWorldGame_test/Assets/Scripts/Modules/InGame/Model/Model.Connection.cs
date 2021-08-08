@@ -4,6 +4,7 @@ using System.IO;
 //Model.Connection 
 public partial class Model 
 {
+    /*
     const string hostname= "localhost";
     const string port = "8080";
 
@@ -17,5 +18,6 @@ public partial class Model
     public static readonly Uri loginUri = new Uri($"{hostname}:{port}/{loginPath}");
     public static readonly Uri logoutUri = new Uri($"{hostname}:{port}/{logoutPath}");
     public static readonly Uri gameUri = new Uri($"{hostname}:{port}/{gamePath}");
+    */
 
 }

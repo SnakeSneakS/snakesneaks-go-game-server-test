@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 //Client: Http Authentication 
 public class HttpAuthClient 
 {
+    /*
     public UnityWebRequest www;
 
     public HttpAuthClient()
@@ -137,4 +138,5 @@ public class HttpAuthClient
 
         yield break;
     }
+    */
 }

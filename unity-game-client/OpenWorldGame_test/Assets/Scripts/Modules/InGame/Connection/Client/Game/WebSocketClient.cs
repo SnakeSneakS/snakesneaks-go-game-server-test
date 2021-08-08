@@ -3,46 +3,53 @@ using UnityEngine;
 using WebSocketSharp; 
 
 //Client: WebSocketClient 
-public class WebSocketClient 
+public abstract class WebSocketClient: MonoBehaviour  
 {
+    [SerializeField] protected string hostname="localhost";
+    [SerializeField] protected string port="8000";
+    [SerializeField] protected string path="/";
+
+    protected virtual EventHandler<MessageEventArgs> ReceivedEventHandler { get; set; } 
+    protected virtual EventHandler<CloseEventArgs> ClosedEventHandler { get; set; } 
+    protected virtual EventHandler<ErrorEventArgs> ErrorEventHandler { get; set; } 
+
     public WebSocket ws;
 
     public WebSocketClient()
     {
-        this.ws = new WebSocket($"ws://{Model.gameUri}");
+    }
+
+    public WebSocketClient(string hostname,string port,string path)
+    {
+        this.hostname = hostname;
+        this.port = port;
+        this.path = path;
+    }
+
+    public void Connect()
+    {
+        this.ws = new WebSocket($"ws://{hostname}:{port}{path}");
         ws.Connect();
 
         //when received 
         ws.OnMessage += (sender, e) => {
             Debug.Log($"Received Data: \n{e.Data}");
         };
+        ws.OnMessage += ReceivedEventHandler;
 
         //when closed
         ws.OnClose += (sender, e) =>
         {
             Debug.Log("WebSocket Connection Closed.");
         };
+        ws.OnClose += ClosedEventHandler;
 
         //when error
         ws.OnError += (sender, e) =>
         {
             Debug.LogError("WebSocket Connection Error.");
         };
-    }
-
-    public WebSocketClient(EventHandler<MessageEventArgs> ReceivedEventHandler, EventHandler<CloseEventArgs> ClosedEventHandler, EventHandler<ErrorEventArgs> ErrorEventHandler)
-    {
-        this.ws = new WebSocket($"ws://{Model.gameUri}");
-        ws.Connect();
-
-        //when received 
-        ws.OnMessage += ReceivedEventHandler;
-
-        //when closed
-        ws.OnClose += ClosedEventHandler;
-
-        //when error
         ws.OnError += ErrorEventHandler;
     }
-
+    
 }

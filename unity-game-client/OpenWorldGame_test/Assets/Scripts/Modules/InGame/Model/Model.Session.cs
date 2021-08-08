@@ -1,8 +1,10 @@
 //Model.Session 
 public partial class Model 
 {
-    const int USER_ID_LENGTH_MAX=20;
-    const int SESSION_ID_LENGTH_MAX = 200;
+    public const int USER_ID_LENGTH_MIN = 1;
+    public const int USER_ID_LENGTH_MAX=20;
+    public const int SESSION_ID_LENGTH_MIN = 1;
+    public const int SESSION_ID_LENGTH_MAX = 200;
 
     [System.Serializable]
     public class Session
@@ -15,7 +17,7 @@ public partial class Model
             }
             set
             {
-                this.user_id = (value == null || value.Length > USER_ID_LENGTH_MAX) ? null : value;
+                this.user_id = (value == null || value.Length > USER_ID_LENGTH_MAX || value.Length<USER_ID_LENGTH_MIN) ? null : value;
             }
         }
         [UnityEngine.SerializeField] private string session_id;
@@ -27,7 +29,7 @@ public partial class Model
             }
             set
             {
-                this.session_id = (value == null || value.Length>SESSION_ID_LENGTH_MAX)?null:value;
+                this.session_id = (value == null || value.Length>SESSION_ID_LENGTH_MAX || value.Length<SESSION_ID_LENGTH_MIN)?null:value;
             }
         }
         private bool error;

@@ -4,9 +4,12 @@ using System.Net.Mail;
 //Model.User
 public partial class Model 
 {
-    const int USERNAME_LENGTH_MAX = 10;
-    const int EMAIL_LENGTH_MAX = 50;
-    const int PASSWORD_LENGTH_MAX = 50;
+    public const int USERNAME_LENGTH_MIN = 1;
+    public const int USERNAME_LENGTH_MAX = 20;
+    public const int EMAIL_LENGTH_MIN = 1;
+    public const int EMAIL_LENGTH_MAX = 300;
+    public const int PASSWORD_LENGTH_MIN = 4;
+    public const int PASSWORD_LENGTH_MAX = 300;
 
     [System.Serializable]
     public class User
@@ -21,7 +24,7 @@ public partial class Model
             }
             set
             {
-                this.username = (value==null || value.Length > USERNAME_LENGTH_MAX) ? null : value;
+                this.username = (value==null || value.Length > USERNAME_LENGTH_MAX || value.Length<USERNAME_LENGTH_MIN) ? null : value;
             }
         }
         [UnityEngine.SerializeField] private string email;
@@ -34,7 +37,7 @@ public partial class Model
             {
                 try
                 {
-                    this.email = (value == null || value.Length>PASSWORD_LENGTH_MAX)?null: new MailAddress(value).Address;
+                    this.email = (value == null || value.Length>EMAIL_LENGTH_MAX || value.Length<EMAIL_LENGTH_MIN)?null: new MailAddress(value).Address;
                 }
                 catch
                 {
@@ -51,7 +54,7 @@ public partial class Model
             }
             set
             {
-                this.password = (value == null || value.Length > PASSWORD_LENGTH_MAX) ? null : value;
+                this.password = (value == null || value.Length > PASSWORD_LENGTH_MAX || value.Length<PASSWORD_LENGTH_MIN) ? null : value;
             }
         }
         private bool error;

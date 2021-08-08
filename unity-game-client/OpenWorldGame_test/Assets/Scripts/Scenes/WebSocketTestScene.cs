@@ -2,8 +2,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(GameWebSocketClient))]
 public class WebSocketTestScene : MonoBehaviour
 {
+    [Header("WebSocket Client")]
+    [SerializeField] GameWebSocketClient m_wsclient;
+
     [Header("WebSocket StateDesplay")]
     [SerializeField] Text WebSocketStateText;
 
@@ -17,12 +21,9 @@ public class WebSocketTestScene : MonoBehaviour
     [Header("WebSocket ReceivedContent")]
     [SerializeField] Text ReceivedText;
 
-    private WebSocketClient m_wsclient; 
-
-
     void Start()
     {
-        this.m_wsclient = new WebSocketClient();
+        this.m_wsclient.Connect(); 
 
         //Connect
         ConnectButton.onClick.AddListener(() =>
@@ -39,6 +40,7 @@ public class WebSocketTestScene : MonoBehaviour
                 return;
             }
             m_wsclient.ws.Send(SendText.text);
+            Debug.Log($"Send: {SendText.text}");
         });
     }
 
