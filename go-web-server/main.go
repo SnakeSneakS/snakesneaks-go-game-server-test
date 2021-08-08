@@ -38,6 +38,8 @@ func main() {
 		color.Blue("This is DEBUG MODE")
 	} else {
 		color.Blue("This is \"not\" DEBUG MODE")
+		color.Red("router don't run because this is not debug mode!")
+		return
 	}
 
 	//database接続
@@ -58,42 +60,47 @@ func main() {
 		var users []model.User
 		db.Order("createdAt asc").Find(&users)
 		defer db.Close()
+		log.Print(users)
 
 		//Session
-		hostname := os.Getenv("GO_GAME_SERVER_CONTAINER_NAME")
-		res, err := http.Get(fmt.Sprintf("http://%s:%s/api/debug/session", hostname, os.Getenv("GO_GAME_SERVER_PORT")))
-		if err != nil {
-			log.Fatal(err)
-			ctx.HTML(200, "index.html", gin.H{
-				"users": users,
-			})
-		}
-		defer res.Body.Close()
-		if res.StatusCode != 200 {
-			fmt.Printf("StatusCode=%d\n", res.StatusCode)
-			ctx.HTML(200, "index.html", gin.H{
-				"users": users,
-			})
-			return
-		}
-		decoder := json.NewDecoder(res.Body)
-		var mapData map[string]auth.SessionInf
-		if err := decoder.Decode(&mapData); err != nil {
-			log.Println("Failed to decode sessionData: ", err)
-			ctx.HTML(200, "index.html", gin.H{
-				"users": users,
-			})
-		}
-		log.Print(mapData)
 		sessionData := make([]SessionData, 0)
-		for k, v := range mapData {
-			s := SessionData{
-				UserID:     k,
-				SessionInf: v,
+		//run when DEBUG_MODE
+		if os.Getenv("DEBUG_MODE") == "True" {
+			hostname := os.Getenv("GO_GAME_SERVER_CONTAINER_NAME")
+			res, err := http.Get(fmt.Sprintf("http://%s:%s/api/debug/session", hostname, os.Getenv("GO_GAME_SERVER_PORT")))
+			if err != nil {
+				log.Println(err)
+				ctx.HTML(200, "index.html", gin.H{
+					"users": users,
+				})
 			}
-			sessionData = append(sessionData, s)
+			defer res.Body.Close()
+			if res.StatusCode != 200 {
+				fmt.Printf("StatusCode: %d\n", res.StatusCode)
+				ctx.HTML(200, "index.html", gin.H{
+					"users": users,
+				})
+				return
+			}
+			decoder := json.NewDecoder(res.Body)
+			var mapData map[string]auth.SessionInf
+			if err := decoder.Decode(&mapData); err != nil {
+				log.Println("Failed to decode sessionData: ", err)
+				ctx.HTML(200, "index.html", gin.H{
+					"users": users,
+				})
+			}
+			log.Print(mapData)
+			for k, v := range mapData {
+				s := SessionData{
+					UserID:     k,
+					SessionInf: v,
+				}
+				sessionData = append(sessionData, s)
+			}
 		}
 		log.Print(sessionData)
+
 		ctx.HTML(200, "index.html", gin.H{
 			"users":       users,
 			"sessionData": sessionData,
@@ -141,12 +148,21 @@ func main() {
 		})
 	*/
 
-	//run when DEBUG_MODE
-	if os.Getenv("DEBUG_MODE") != "True" {
-		log.Fatal("router don't run because this is not debug mode!")
-		return
+	hostname := os.Getenv("HOST_NAME")
+	if hostname == "localhost" {
+		hostname = ""
 	}
-	router.Run(fmt.Sprintf(":%s", os.Getenv("GO_WEB_SERVER_PORT")))
+	if os.Getenv("USE_TLS") == "True" {
+		//USE TLS
+		addr := fmt.Sprintf("%s:%s", hostname, os.Getenv("GO_WEB_SERVER_PORT_TLS"))
+		crtfile := fmt.Sprintf("./secret/%s", os.Getenv("GO_WEB_TLS_CERT_FILE"))
+		keyfile := fmt.Sprintf("./secret/%s", os.Getenv("GO_WEB_TLS_KEY_FILE"))
+		router.RunTLS(addr, crtfile, keyfile)
+	} else {
+		//DON'T USE TLS
+		addr := fmt.Sprintf("%s:%s", hostname, os.Getenv("GO_WEB_SERVER_PORT"))
+		router.Run(addr)
+	}
 
 }
 

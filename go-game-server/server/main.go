@@ -45,9 +45,23 @@ func RunServer() {
 	if hostname == "localhost" {
 		hostname = ""
 	}
-	addr := fmt.Sprintf("%s:%s", hostname, os.Getenv("GO_GAME_SERVER_PORT"))
-	log.Printf("address: %s", addr)
-	if err := http.ListenAndServe(addr, h); err != nil {
-		panic(err)
+
+	if os.Getenv("USE_TLS") == "True" {
+		//USE TLS
+		addr := fmt.Sprintf("%s:%s", hostname, os.Getenv("GO_GAME_SERVER_PORT_TLS"))
+		//put certification file and key file into secret folder
+		crtfile := fmt.Sprintf("./secret/%s", os.Getenv("GO_GAME_TLS_CERT_FILE"))
+		keyfile := fmt.Sprintf("./secret/%s", os.Getenv("GO_GAME_TLS_KEY_FILE"))
+		if err := http.ListenAndServeTLS(addr, crtfile, keyfile, h); err != nil {
+			panic(err)
+		}
+	} else {
+		//DON'T USE TLS
+		addr := fmt.Sprintf("%s:%s", hostname, os.Getenv("GO_GAME_SERVER_PORT"))
+		log.Printf("address: %s", addr)
+		if err := http.ListenAndServe(addr, h); err != nil {
+			panic(err)
+		}
 	}
+
 }
