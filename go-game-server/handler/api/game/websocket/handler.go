@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/game"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/ingame"
 )
 
 // Handler handle request to game
@@ -23,5 +23,5 @@ func NewHandler() *Handler {
 WEB SOCKET CONNECTION
 */
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	game.HandleWebSocket(w, r)
+	ingame.HandleWebSocket(w, r)
 }

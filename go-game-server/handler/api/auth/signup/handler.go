@@ -37,7 +37,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		signupFailedWrite(w)
 		return
 	}
-	log.Print(u.User.Password) ///////////ここ見るとわかるように、jsonが適切にデコードされていない
+	//log.Print(u.User.Password) ///////////ここ見るとわかるように、jsonが適切にデコードされていない
 
 	//create new User and get session
 	session, err := auth.Signup(u.User)
@@ -58,7 +58,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func signupFailedWrite(w http.ResponseWriter) {
 	if err := json.NewEncoder(w).Encode(&model.StatusRes{
-		Status: model.Failed,
+		Status: model.ConnFailed,
 	}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
@@ -66,7 +66,7 @@ func signupFailedWrite(w http.ResponseWriter) {
 
 func signupSuccessWrite(w http.ResponseWriter, session model.Session) {
 	if err := json.NewEncoder(w).Encode(&model.SessionRes{
-		Status:  model.Success,
+		Status:  model.ConnSuccess,
 		Session: session,
 	}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

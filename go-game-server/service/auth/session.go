@@ -19,7 +19,7 @@ const (
 	sessionIDsize        = 32
 	sessionExpireSeconds = 604800 //604800[s]=1[week], int64
 
-	sessionManegementRoutineSeconds = 10
+	sessionManegementRoutineSeconds = time.Second * 60
 )
 
 //SessionInf is a information of session linked by "userID"
@@ -42,7 +42,7 @@ func StartSessionManegement() {
 					}
 				}
 			}
-			time.Sleep(time.Second * sessionManegementRoutineSeconds)
+			time.Sleep(sessionManegementRoutineSeconds)
 		}
 	}()
 }

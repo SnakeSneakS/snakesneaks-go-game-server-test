@@ -10,6 +10,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/auth"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/ingame"
 )
 
 //LoadENV load env from {path} (e.g. ./env)
@@ -38,6 +39,9 @@ func RunServer() {
 
 	// session management
 	auth.StartSessionManegement()
+
+	//game manegement
+	ingame.StartGame()
 
 	// listen
 	log.Println("Server started")

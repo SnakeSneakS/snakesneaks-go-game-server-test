@@ -1,10 +1,11 @@
-package game
+package ingame
 
 import (
 	"log"
 	"net/http"
 
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/gamemodel"
 
 	"github.com/gorilla/websocket"
 )
@@ -15,6 +16,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	var upgrader = websocket.Upgrader{
 		ReadBufferSize:  model.ReadBufferSize,
 		WriteBufferSize: model.WriteBufferSize,
+		//EnableCompression: true,
 	}
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -22,16 +24,23 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//WRITE SPME CODE USING CONN
+	InGameClientData[conn] = gamemodel.GameClient{}
+
 	for {
-		messageType, p, err := conn.ReadMessage()
+		messageType, message, err := conn.ReadMessage()
 		if err != nil {
 			log.Println(err)
+			delete(InGameClientData, conn)
+			log.Println("Delete connection!")
 			return
 		}
-		if err := conn.WriteMessage(messageType, p); err != nil {
-			log.Println(err)
-			return
+
+		if gcd, ok := InGameClientData[conn]; ok {
+			HandleMessage(messageType, message, gcd)
+		} else {
+			break
 		}
+
 	}
+
 }
