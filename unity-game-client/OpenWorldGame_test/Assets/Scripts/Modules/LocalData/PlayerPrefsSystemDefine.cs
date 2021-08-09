@@ -4,15 +4,6 @@ using UnityEngine;
 
 public class PlayerPrefsSystemDefine : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public static readonly string CLIENT_USER_ID= "CLIENT_USER_ID";
+    public static readonly string CLIENT_SESSION_ID= "CLIENT_SESSION_ID";
 }

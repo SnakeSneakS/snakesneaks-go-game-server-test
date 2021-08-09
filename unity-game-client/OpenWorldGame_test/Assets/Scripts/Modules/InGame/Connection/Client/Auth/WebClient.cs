@@ -18,8 +18,18 @@ public abstract class WebClient : MonoBehaviour
     //store data read from response 
     public object data { get; protected set; } //parsed data
     public string message { get; protected set; } //message show to users or developers 
-    public bool isSuccess { get; protected set; } //connection and data parse success 
-    public bool isInProgress { get; private set; } //connection in progress 
+    public ResultType result { get; protected set; } //errorType
+
+    [Serializable]
+    public enum ResultType
+    {
+        None,
+        Success,       //not error
+        ConnInProgress,
+        ConnectionError, //Connection error
+        RequestDataError,       //Data error
+        ResponseDataError,
+    }
     
 
     [Serializable]
@@ -69,9 +79,9 @@ public abstract class WebClient : MonoBehaviour
     /// <returns></returns>
     public IEnumerator Send()
     {
-        if (this.isInProgress)
+        if (this.result==ResultType.ConnInProgress)
         {
-            this.isSuccess = false;
+            this.result = ResultType.ConnectionError;
             this.message = "Connection is in Progress...";
             Debug.Log("<color=\"red\">Previous WWW connection is in Progress...</color>");
             yield break;
@@ -79,7 +89,7 @@ public abstract class WebClient : MonoBehaviour
 
         if (CheckRequestData() != true)
         {
-            this.isSuccess = false;
+            this.result = ResultType.RequestDataError;
             Debug.Log("<color=\"red\">Invalid Data. So Stopped to Send Data to Server.</color>");
             yield break;
         }
@@ -87,7 +97,7 @@ public abstract class WebClient : MonoBehaviour
         Refresh();
         using (UnityWebRequest www = new UnityWebRequest($"{protocol.ToString()}://{hostname}:{port}{path}", this.httpRequestMethod.ToString()))
         {
-            isInProgress = true;
+            this.result = ResultType.ConnInProgress;
 
             //Certification
             //Note that this force all true
@@ -110,24 +120,24 @@ public abstract class WebClient : MonoBehaviour
             //success
             if (www.result==UnityWebRequest.Result.Success)
             {
-                isSuccess = true;
+                this.result = ResultType.Success;
                 this.message = "通信成功";
                 HandleSuccessData(www.downloadHandler.text);
             }
             //in progress
             else if (www.result==UnityWebRequest.Result.InProgress)
             {
+                this.result = ResultType.ConnInProgress;
                 HandleInProgressData();
             }
             //error 
             else
             {
-                isSuccess = false;
+                this.result = ResultType.ConnectionError;
                 this.message = "通信失敗: \n"+www.error;
                 HandleErrorData(www.error);
             }
 
-            isInProgress = false;
             Debug.Log(this.message);
             //www.Dispose();
         }
@@ -142,8 +152,7 @@ public abstract class WebClient : MonoBehaviour
     {
         this.data = null;
         this.message = null;
-        this.isSuccess = false;
-        this.isInProgress = true;
+        this.result = ResultType.None;
     }
 
     /// <summary>

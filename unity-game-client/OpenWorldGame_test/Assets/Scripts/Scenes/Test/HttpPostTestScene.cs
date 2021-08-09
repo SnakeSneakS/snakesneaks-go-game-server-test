@@ -87,16 +87,16 @@ public class HttpPostTestScene : MonoBehaviour
         string username = Signup_UsernameInputField.text;
         string email = Signup_EmailInputField.text;
         string password = Signup_PasswordInputField.text;
-        signupWebClient.SetData(username, email, password);
+        signupWebClient.SetData(email, password);
         yield return StartCoroutine(signupWebClient.Send());
 
         //処理
-        if (signupWebClient.isSuccess == true && signupWebClient.isInProgress == false)
+        if (loginWebClient.result == WebClient.ResultType.Success)
         {
             //成功した時
             //LoginWebClientはひとまずLoginResponseDataをdataに保存するとする 
             SignupWebClient.SignupResponseData lrd = (SignupWebClient.SignupResponseData)signupWebClient.data;
-            Debug.Log($"ParsedResponseData: \nStatus: {lrd.status}, user_id: {lrd.session.user_id}, session_id: {lrd.session.session_id}");
+            Debug.Log($"ParsedResponseData: \nStatus: {lrd.status}, user_id: {lrd.session.UserID}, session_id: {lrd.session.SessionID}");
             Debug.Log(signupWebClient.message);
         }
         else
@@ -115,19 +115,18 @@ public class HttpPostTestScene : MonoBehaviour
     /// <returns></returns>
     IEnumerator LoginRequest()
     {
-        string username = Login_UsernameInputField.text;
         string email = Login_EmailInputField.text;
         string password = Login_PasswordInputField.text;
-        loginWebClient.SetData(username, email, password);
+        loginWebClient.SetData(email, password);
         yield return StartCoroutine(loginWebClient.Send());
 
         //処理
-        if (loginWebClient.isSuccess == true && loginWebClient.isInProgress == false)
+        if (loginWebClient.result==WebClient.ResultType.Success)
         {
             //成功した時
             //LoginWebClientはひとまずLoginResponseDataをdataに保存するとする 
             LoginWebClient.LoginResponseData lrd = (LoginWebClient.LoginResponseData)loginWebClient.data;
-            Debug.Log($"ParsedResponseData: \nStatus: {lrd.status}, user_id: {lrd.session.user_id}, session_id: {lrd.session.session_id}");
+            Debug.Log($"ParsedResponseData: \nStatus: {lrd.status}, user_id: {lrd.session.UserID}, session_id: {lrd.session.SessionID}");
             Debug.Log(loginWebClient.message);
         }
         else
@@ -152,7 +151,7 @@ public class HttpPostTestScene : MonoBehaviour
         yield return StartCoroutine(logoutWebClient.Send());
 
         //処理
-        if (logoutWebClient.isSuccess == true && logoutWebClient.isInProgress == false)
+        if (logoutWebClient.result == WebClient.ResultType.Success)
         {
             //成功した時
             //LoginWebClientはひとまずLoginResponseDataをdataに保存するとする 

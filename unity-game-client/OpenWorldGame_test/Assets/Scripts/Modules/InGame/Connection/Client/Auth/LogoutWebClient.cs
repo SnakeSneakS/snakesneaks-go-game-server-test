@@ -38,7 +38,7 @@ public class LogoutWebClient : WebClient
     [Serializable]
     public struct LogoutResponseData
     {
-        [SerializeField] public string status;
+        [SerializeField] public Model.ConnStatus status;
     }
 
 
@@ -95,7 +95,7 @@ public class LogoutWebClient : WebClient
     /// <returns></returns>
     protected bool CheckResponseData(LogoutResponseData lrd)
     {
-        return lrd.status != null;
+        return true;
     }
 
     /// <summary>
@@ -145,7 +145,7 @@ public class LogoutWebClient : WebClient
         if (CheckResponseData(lrd) != true)
         {
             this.message = "Failed to parse response data. ";
-            this.isSuccess = false;
+            this.result = ResultType.ResponseDataError;
             Debug.Log(this.message);
         }
         else

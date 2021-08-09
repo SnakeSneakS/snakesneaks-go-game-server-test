@@ -16,19 +16,16 @@ public class SignupWebClient : WebClient
     [Serializable]
     public struct SignupRequestData
     {
-        [SerializeField] public string username;
         [SerializeField] public string email;
         [SerializeField] public string password;
 
         /// <summary>
         /// COnstructor
         /// </summary>
-        /// <param name="username"></param>
         /// <param name="email"></param>
         /// <param name="password"></param>
-        public SignupRequestData(string username,string email,string password)
+        public SignupRequestData(string email,string password)
         {
-            this.username = username;
             this.email = email;
             this.password = password;
         }
@@ -40,14 +37,8 @@ public class SignupWebClient : WebClient
     [Serializable]
     public struct SignupResponseData
     {
-        [SerializeField] public string status;
-        [SerializeField] public Session session;
-    }
-    [Serializable]
-    public class Session
-    {
-        [SerializeField] public string user_id;
-        [SerializeField] public string session_id;
+        [SerializeField] public Model.ConnStatus status;
+        [SerializeField] public Model.Session session;
     }
 
     /// <summary>
@@ -81,20 +72,19 @@ public class SignupWebClient : WebClient
     /// <param name="hostname"></param>
     /// <param name="port"></param>
     /// <param name="path">default "/"</param>
-    public SignupWebClient(string username, string email, string password,ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string signupPath) : base(protocol,requestMethod, hostname, port, signupPath)
+    public SignupWebClient(string email, string password,ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string signupPath) : base(protocol,requestMethod, hostname, port, signupPath)
     {
-        SetData(username,email,password);
+        SetData(email,password);
     }
 
     /// <summary>
     /// Setdata 
     /// </summary>
-    /// <param name="username"></param>
     /// <param name="email"></param>
     /// <param name="password"></param>
-    public void SetData(string username, string email, string password)
+    public void SetData(string email, string password)
     {
-        this.signupRequestData = new SignupRequestData(username, email, password);
+        this.signupRequestData = new SignupRequestData(email, password);
     }
 
     /// <summary>
@@ -104,7 +94,7 @@ public class SignupWebClient : WebClient
     /// <returns></returns>
     protected bool CheckResponseData(SignupResponseData lrd)
     {
-        return lrd.status != null;
+        return true;
     }
 
     /// <summary>
@@ -113,11 +103,7 @@ public class SignupWebClient : WebClient
     protected override bool CheckRequestData()
     {
         bool ok = true;
-        if (this.signupRequestData.username.Length > Model.USERNAME_LENGTH_MAX || this.signupRequestData.username.Length < Model.USERNAME_LENGTH_MIN)
-        {
-            ok = false;
-            this.message = $"不適切なユーザ名です!\n{Model.USERNAME_LENGTH_MIN}文字〜{Model.USERNAME_LENGTH_MAX}文字で入力してください。";
-        }else if (this.signupRequestData.email.Length > Model.EMAIL_LENGTH_MAX || this.signupRequestData.email.Length< Model.EMAIL_LENGTH_MIN)
+        if (this.signupRequestData.email.Length > Model.EMAIL_LENGTH_MAX || this.signupRequestData.email.Length< Model.EMAIL_LENGTH_MIN)
         {
             ok = false;
             this.message = $"不適切なメールアドレスです!\n{Model.EMAIL_LENGTH_MIN}文字〜{Model.EMAIL_LENGTH_MAX}文字で入力してください。";
@@ -169,13 +155,13 @@ public class SignupWebClient : WebClient
         if (CheckResponseData(lrd)!=true)
         {
             this.message = "Failed to parse response data. ";
-            this.isSuccess = false;
+            this.result = ResultType.ResponseDataError;
             Debug.Log(this.message);
         }
         else
         {
             //this.message = $"通信成功!\nData: {lrd.ToString()}";
-            this.message = $"通信成功!\nData: status: {lrd.status}, session: {{user_id: {lrd.session.user_id}, session_id: {lrd.session.session_id}}} ";
+            this.message = $"通信成功!\nData: status: {lrd.status}, session: {{user_id: {lrd.session.UserID}, session_id: {lrd.session.SessionID}}} ";
         }
     }
 

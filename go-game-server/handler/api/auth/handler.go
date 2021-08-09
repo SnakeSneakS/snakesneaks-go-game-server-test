@@ -5,6 +5,7 @@ import (
 
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/auth/login"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/auth/logout"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/auth/session"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/auth/signup"
 
 	"github.com/gorilla/mux"
@@ -27,6 +28,7 @@ func NewHandler() *Handler {
 	h.r.Handle("/login", login.NewHandler())
 	h.r.Handle("/logout", logout.NewHandler())
 	h.r.Handle("/signup", signup.NewHandler())
+	h.r.Handle("/session", session.NewHandler())
 
 	return h
 }

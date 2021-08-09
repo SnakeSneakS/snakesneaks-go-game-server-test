@@ -19,7 +19,7 @@ public partial class Model
     public static readonly Uri logoutUri = new Uri($"{hostname}:{port}/{logoutPath}");
     public static readonly Uri gameUri = new Uri($"{hostname}:{port}/{gamePath}");
     */
-
+    [Serializable]
     public enum ConnStatus
     {
         success=0,
