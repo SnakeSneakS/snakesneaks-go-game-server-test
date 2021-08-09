@@ -28,28 +28,30 @@ public abstract class WebSocketClient: MonoBehaviour
 
     public void Connect()
     {
-        this.ws = new WebSocket($"ws://{hostname}:{port}{path}");
+        if (this.ws == null)
+        {
+            this.ws = new WebSocket($"ws://{hostname}:{port}{path}");
+            //when received
+            ws.OnMessage += (sender, e) => {
+                Debug.Log($"Received Data: \n{e.Data}");
+            };
+            ws.OnMessage += ReceivedEventHandler;
+
+            //when closed
+            ws.OnClose += (sender, e) =>
+            {
+                Debug.Log("WebSocket Connection Closed.");
+            };
+            ws.OnClose += ClosedEventHandler;
+
+            //when error
+            ws.OnError += (sender, e) =>
+            {
+                Debug.LogError("WebSocket Connection Error.");
+            };
+            ws.OnError += ErrorEventHandler;
+        }
         ws.Connect();
-
-        //when received 
-        ws.OnMessage += (sender, e) => {
-            Debug.Log($"Received Data: \n{e.Data}");
-        };
-        ws.OnMessage += ReceivedEventHandler;
-
-        //when closed
-        ws.OnClose += (sender, e) =>
-        {
-            Debug.Log("WebSocket Connection Closed.");
-        };
-        ws.OnClose += ClosedEventHandler;
-
-        //when error
-        ws.OnError += (sender, e) =>
-        {
-            Debug.LogError("WebSocket Connection Error.");
-        };
-        ws.OnError += ErrorEventHandler;
     }
     
 }

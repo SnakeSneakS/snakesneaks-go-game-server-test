@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+//WebSocketTestScene.Controller 
 [RequireComponent(typeof(GameWebSocketClient))]
 public class WebSocketTestScene : MonoBehaviour
 {
@@ -21,14 +22,16 @@ public class WebSocketTestScene : MonoBehaviour
     [Header("WebSocket ReceivedContent")]
     [SerializeField] Text ReceivedText;
 
+    [SerializeField] private GameMethodHandler gameMethodHandler;
+
     void Start()
     {
-        this.m_wsclient.Connect(); 
+        Connect();
 
         //Connect
         ConnectButton.onClick.AddListener(() =>
         {
-            m_wsclient.ws.Connect();
+            Connect();
         });
 
         //Send
@@ -39,9 +42,19 @@ public class WebSocketTestScene : MonoBehaviour
                 Debug.LogAssertion("WebSocket Connection Not Alive");
                 return;
             }
-            m_wsclient.ws.Send(SendText.text);
+            this.gameMethodHandler.SendChat(SendText.text);
+            //m_wsclient.ws.Send(SendText.text);
             Debug.Log($"Send: {SendText.text}");
         });
+    }
+
+    private void Connect()
+    {
+        this.m_wsclient.Connect();
+        if (this.m_wsclient.ws.IsAlive == true)
+        {
+            this.gameMethodHandler.StartHandler(m_wsclient.ws, new Model.Session { });
+        }
     }
 
     private void FixedUpdate()

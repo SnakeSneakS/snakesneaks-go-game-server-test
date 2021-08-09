@@ -20,4 +20,9 @@ public partial class Model
     public static readonly Uri gameUri = new Uri($"{hostname}:{port}/{gamePath}");
     */
 
+    public enum ConnStatus
+    {
+        success=0,
+        failed 
+    }
 }
