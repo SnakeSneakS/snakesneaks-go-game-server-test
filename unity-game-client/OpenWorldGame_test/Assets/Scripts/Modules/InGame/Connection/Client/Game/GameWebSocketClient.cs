@@ -13,7 +13,7 @@ public class GameWebSocketClient : WebSocketClient
 
     }
 
-    public GameWebSocketClient(string hostname, string port, string path) :base(hostname, port, path)
+    public GameWebSocketClient(Protocol protocol,string hostname, string port, string path) :base(protocol, hostname, port, path)
     {
 
     }

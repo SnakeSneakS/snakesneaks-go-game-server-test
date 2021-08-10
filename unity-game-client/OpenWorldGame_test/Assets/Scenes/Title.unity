@@ -320,9 +320,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 424bdfd182ed748829ebe271cc38506c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  protocol: 0
+  protocol: 1
   hostname: localhost
-  port: 8080
+  port: 50000
   path: /api/auth/session
   httpRequestMethod: 1
   certAllowAll: 1
@@ -342,9 +342,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c74ef6b152f544d99a9fcc57298ee9ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  protocol: 0
+  protocol: 1
   hostname: localhost
-  port: 8080
+  port: 50000
   path: /api/auth/logout
   httpRequestMethod: 1
   certAllowAll: 1

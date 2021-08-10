@@ -1185,9 +1185,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82607a785ff21495c8b1ae63a9cdc584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  protocol: 1
   hostname: localhost
-  port: 8080
+  port: 50000
   path: /api/game/websocket
+  isCertAll: 1
 --- !u!1 &2022580127
 GameObject:
   m_ObjectHideFlags: 0
