@@ -40,14 +40,14 @@ public abstract class WebSocketClient: MonoBehaviour
             //when closed
             ws.OnClose += (sender, e) =>
             {
-                Debug.Log("WebSocket Connection Closed.");
+                Debug.Log($"WebSocket Connection Closed.\n{e}");
             };
             ws.OnClose += ClosedEventHandler;
 
             //when error
             ws.OnError += (sender, e) =>
             {
-                Debug.LogError("WebSocket Connection Error.");
+                Debug.LogError($"WebSocket Connection Error.\n{e}");
             };
             ws.OnError += ErrorEventHandler;
         }

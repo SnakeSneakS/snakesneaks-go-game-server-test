@@ -1,9 +1,18 @@
+using System;
 using WebSocketSharp;
 using UnityEngine; 
 
 //GameMethod.Chat
 public partial class GameMethodHandler
 {
+    public delegate void ChatEventHandler<T>(T args);
+    public event ChatEventHandler<ChatEventArgs> OnChatReceive;
+
+    public struct ChatEventArgs
+    {
+        public string user_id;
+        public string text;
+    }
     
     /// <summary>
     /// Send Chat Message To Server 
@@ -21,10 +30,11 @@ public partial class GameMethodHandler
     /// Handle Received Message 
     /// </summary>
     /// <param name="json"></param>
-    public void ReceiveChat(string json)
+    public void ReceiveChat(string user_id,string json)
     {
         Gamemodel.ChatMethod chatMethod = JsonUtility.FromJson<Gamemodel.ChatMethod>(json);
-        Debug.Log("ReceivedChatText"+chatMethod.text);
+        Debug.Log($"ReceivedChat: \nuser_id: {user_id}, text: {chatMethod.text}");
+        OnChatReceive?.Invoke(new ChatEventArgs {user_id=user_id, text=chatMethod.text });
     }
     
    

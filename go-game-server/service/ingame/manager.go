@@ -1,11 +1,13 @@
 package ingame
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"time"
 
 	"github.com/gorilla/websocket"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/auth"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/ingame/gamemethod"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/gamemodel"
 )
@@ -70,17 +72,23 @@ func StartMessageSender() {
 }
 
 // HandleMessage
-func HandleMessage(messageType int, message []byte, gcd gamemodel.GameClient) {
+func HandleMessage(messageType int, message []byte, conn *websocket.Conn, gcd gamemodel.GameClient) {
 	log.Println("HandleWebSocket")
-
-	//just ping pong
-	//PingPong(messageType, message, gcd)
 
 	if messageType == websocket.TextMessage {
 		var req gamemodel.GameReq
 		if err := json.Unmarshal(message, &req); err != nil {
 			log.Printf(("Failed to Unmarshal message: %s\n"), message)
 		}
+		//Session Check
+		if err := auth.CheckSession(context.TODO(), req.Session.UserID, req.Session.SessionID); err != nil {
+			//session failed!
+			onSessionFailed(conn)
+			return
+		}
+		gcd.Info.UserID = req.Session.UserID
+
+		//Handle Game Req
 		for _, method := range req.GameMethods {
 			log.Printf("ReceivedMethod: Method(%d), Content(%s)\n", method.MethodType, method.Content)
 			var sendMethod gamemodel.GameMethod
@@ -100,10 +108,12 @@ func HandleMessage(messageType int, message []byte, gcd gamemodel.GameClient) {
 }
 
 //Just return the received data
+/*
 func PingPong(messageType int, message []byte, gcd gamemodel.GameClient) {
 	m := MessageSet{MessageType: messageType, Message: message}
 	broadcast <- m //ここに入れたものを送信する
 }
+*/
 
 //Add Method to send
 func AddMethod(userID string, gameMethod gamemodel.GameMethod) {
@@ -112,4 +122,8 @@ func AddMethod(userID string, gameMethod gamemodel.GameMethod) {
 		StoredResMethods[userID] = []gamemodel.GameMethod{gameMethod}
 	}
 	methods = append(methods, gameMethod)
+}
+
+func onSessionFailed(conn *websocket.Conn) {
+	conn.Close()
 }

@@ -36,7 +36,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if gcd, ok := InGameClientData[conn]; ok {
-			HandleMessage(messageType, message, gcd)
+			HandleMessage(messageType, message, conn, gcd)
 		} else {
 			break
 		}

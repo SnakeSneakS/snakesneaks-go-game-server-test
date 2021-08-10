@@ -148,7 +148,7 @@ public class LoginSceneController : MonoBehaviour
             switch (signupWebClient.result)
             {
                 case LoginWebClient.ResultType.RequestDataError:
-                    RequestDataError(loginWebClient);
+                    RequestDataError(signupWebClient);
                     break;
                 case LoginWebClient.ResultType.ResponseDataError:
                 case LoginWebClient.ResultType.ConnectionError:
@@ -168,9 +168,9 @@ public class LoginSceneController : MonoBehaviour
         StartCoroutine(ShowAlertForWhile(ResultPanel, 2.0f));
     }
 
-    public void RequestDataError(LoginWebClient lwc)
+    public void RequestDataError(WebClient wc)
     {
-        ResultText.text = lwc.message;
+        ResultText.text = wc.message;
         StartCoroutine(ShowAlertForWhile(ResultPanel, 2.0f));
     }
 

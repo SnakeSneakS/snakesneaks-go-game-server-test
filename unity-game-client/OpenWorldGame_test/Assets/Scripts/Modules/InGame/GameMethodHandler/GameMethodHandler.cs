@@ -14,7 +14,9 @@ public partial class GameMethodHandler : MonoBehaviour
 
     private bool isWorking;
 
-    
+    public event EventHandler OnSessionFailed;
+    public event EventHandler OnGameMethodHandlerFailed;
+
     public void StartHandler(WebSocket webSocket, Model.Session session)
     {
         if (isWorking == true)
@@ -26,6 +28,12 @@ public partial class GameMethodHandler : MonoBehaviour
         this.session = session;
         this.webSocket = webSocket;
         this.isWorking = false;
+
+        this.webSocket.OnMessage += (sender, e) =>
+        {
+            OnReceive(e.Data);
+        };
+
         StartCoroutine(SendCoroutine());
     }
 
@@ -45,6 +53,7 @@ public partial class GameMethodHandler : MonoBehaviour
         }
         Debug.Log("Stopped Working For Some Reason!");
         isWorking = false;
+        OnGameMethodHandlerFailed?.Invoke(this, null);
         yield break;
     }
 
@@ -74,12 +83,14 @@ public partial class GameMethodHandler : MonoBehaviour
         else
         {
             isWorking = false;
+            Debug.Log("Websocket Connection is not alive");
         }
         
     }
 
-    public void Receive(Gamemodel.GameRes gameRes)
+    public void OnReceive(string response)
     {
+        Gamemodel.GameRes gameRes = JsonUtility.FromJson<Gamemodel.GameRes>(response);
         if (gameRes.status==Model.ConnStatus.success)
         {
             foreach(Gamemodel.GameResUnit gameResUnit in gameRes.response)
@@ -97,13 +108,17 @@ public partial class GameMethodHandler : MonoBehaviour
                         case Gamemodel.GameMethodType.ExitWorld:
                             break;
                         case Gamemodel.GameMethodType.Chat:
-                            ReceiveChat(method.content);
+                            ReceiveChat(user_id,method.content);
                             break;
                         case Gamemodel.GameMethodType.Move:
                             break;
                     }
                 }
             }
+        }
+        else
+        {
+            OnSessionFailed?.Invoke(this,null);
         }
     }
 }
