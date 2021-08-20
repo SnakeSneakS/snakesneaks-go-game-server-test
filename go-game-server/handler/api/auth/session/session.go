@@ -54,7 +54,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func sessionFailedWrite(w http.ResponseWriter) {
 	if err := json.NewEncoder(w).Encode(&model.StatusRes{
-		Status: model.ConnFailed,
+		Status: model.AuthError,
 	}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
@@ -62,7 +62,7 @@ func sessionFailedWrite(w http.ResponseWriter) {
 
 func sessionSuccessWrite(w http.ResponseWriter) {
 	if err := json.NewEncoder(w).Encode(&model.StatusRes{
-		Status: model.ConnSuccess,
+		Status: model.Success,
 	}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}

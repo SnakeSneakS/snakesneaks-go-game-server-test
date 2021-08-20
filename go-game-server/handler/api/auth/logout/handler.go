@@ -58,7 +58,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func logoutFailedWrite(w http.ResponseWriter) {
 	if err := json.NewEncoder(w).Encode(&model.StatusRes{
-		Status: model.ConnFailed,
+		Status: model.AuthError,
 	}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
@@ -66,7 +66,7 @@ func logoutFailedWrite(w http.ResponseWriter) {
 
 func logoutSuccessWrite(w http.ResponseWriter) {
 	if err := json.NewEncoder(w).Encode(&model.StatusRes{
-		Status: model.ConnSuccess,
+		Status: model.Success,
 	}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
