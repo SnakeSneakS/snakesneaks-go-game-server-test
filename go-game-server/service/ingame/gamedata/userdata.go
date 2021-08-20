@@ -1,12 +1,6 @@
-package ingame
+package gamedata
 
-import (
-	"log"
-
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/mysql"
-	"gorm.io/gorm"
-)
+/*
 
 func getUser(userID uint) (model.User, error) {
 	m := mysql.NewMysql()
@@ -20,3 +14,5 @@ func getUser(userID uint) (model.User, error) {
 	}
 	return u, nil
 }
+
+*/

@@ -3,12 +3,16 @@ package model
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"time"
+
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/mysql"
+	"gorm.io/gorm"
 )
 
 //User user
 type User struct {
-	ID        uint64    `gorm:"column:id;primaryKey;" json:"id"`
+	ID        uint      `gorm:"column:id;primaryKey;" json:"id"`
 	Username  string    `gorm:"column:username;type:varchar(255);" json:"username"`
 	Email     string    `gorm:"column:email;type:varchar(255);unique;" json:"email"`
 	Password  string    `gorm:"column:password;type:varchar(255);" json:"password"`
@@ -33,4 +37,17 @@ func UserReqHTTP(r io.Reader, src interface{}) error {
 		return err
 	}
 	return nil
+}
+
+//GetUser returns User
+func GetUsername(UserID uint) (string, error) {
+	m := mysql.NewMysql()
+	defer m.Close()
+
+	var u User
+	if err := m.DB.Where("id = ? ", UserID).Select("username").First(&u).Error; err != nil {
+		log.Println(gorm.ErrRecordNotFound)
+		return "", err
+	}
+	return u.Username, nil
 }

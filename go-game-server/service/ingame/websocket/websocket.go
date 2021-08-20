@@ -1,18 +1,18 @@
-package ingame
+package websocket
 
 import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/websocket"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/ingame/gamedata"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/ingame/websocket/receiver"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/gamemodel"
-
-	"github.com/gorilla/websocket"
 )
 
-//*websocket.Conn
-func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
-	//is it needed to store user ip address?
+func NewConnection(w http.ResponseWriter, r *http.Request) {
+	//websocket
 	var upgrader = websocket.Upgrader{
 		ReadBufferSize:  model.ReadBufferSize,
 		WriteBufferSize: model.WriteBufferSize,
@@ -24,23 +24,20 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	InGameClientData[conn] = gamemodel.GameClient{}
+	//SetConnectionData
+	clientData := gamemodel.NewGameClient()
+	gamedata.InGameClientData[conn] = clientData
 
 	for {
 		messageType, message, err := conn.ReadMessage()
 		if err != nil {
 			log.Println(err)
-			delete(InGameClientData, conn)
+			delete(gamedata.InGameClientData, conn)
 			log.Println("Delete connection!")
 			return
 		}
 
-		if gcd, ok := InGameClientData[conn]; ok {
-			HandleMessage(messageType, message, conn, gcd)
-		} else {
-			break
-		}
+		receiver.HandleMessage(messageType, message, conn)
 
 	}
-
 }

@@ -146,7 +146,10 @@ public class HttpPostTestScene : MonoBehaviour
     IEnumerator LogoutRequest()
     {
         string session_id = Logout_SessionIdInputField.text;
-        string user_id = Logout_UserIdInputField.text;
+        uint user_id;
+        try{ user_id = System.Convert.ToUInt32(Logout_UserIdInputField.text);
+        }catch{ user_id = 0;
+        }
         logoutWebClient.SetData(user_id,session_id);
         yield return StartCoroutine(logoutWebClient.Send());
 

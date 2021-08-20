@@ -5,4 +5,5 @@ type ConnStatus int
 const (
 	Success ConnStatus = iota
 	AuthError
+	InternalServerError
 )

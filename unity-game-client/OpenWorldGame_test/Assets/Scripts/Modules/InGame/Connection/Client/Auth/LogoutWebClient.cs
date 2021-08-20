@@ -17,7 +17,7 @@ public class LogoutWebClient : WebClient
     [Serializable]
     public struct LogoutRequestData
     {
-        [SerializeField] public string user_id;
+        [SerializeField] public uint user_id;
         [SerializeField] public string session_id;
 
         /// <summary>
@@ -25,7 +25,7 @@ public class LogoutWebClient : WebClient
         /// </summary>
         /// <param name="user_id"></param>
         /// <param name="session_id"></param>
-        public LogoutRequestData(string user_id, string session_id)
+        public LogoutRequestData(uint user_id, string session_id)
         {
             this.user_id = user_id;
             this.session_id = session_id;
@@ -73,7 +73,7 @@ public class LogoutWebClient : WebClient
     /// <param name="hostname"></param>
     /// <param name="port"></param>
     /// <param name="path">default "/"</param>
-    public LogoutWebClient(string user_id, string session_id, ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string logoutPath) : base(protocol, requestMethod, hostname, port, logoutPath)
+    public LogoutWebClient(uint user_id, string session_id, ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string logoutPath) : base(protocol, requestMethod, hostname, port, logoutPath)
     {
         SetData(user_id,session_id);
     }
@@ -83,7 +83,7 @@ public class LogoutWebClient : WebClient
     /// </summary>
     /// <param name="user_id"></param>
     /// <param name="session_id"></param>
-    public void SetData(string user_id, string session_id)
+    public void SetData(uint user_id, string session_id)
     {
         this.logoutRequestData = new LogoutRequestData(user_id,session_id);
     }
@@ -104,15 +104,15 @@ public class LogoutWebClient : WebClient
     protected override bool CheckRequestData()
     {
         bool ok = true;
-        if (this.logoutRequestData.user_id.Length > Model.USER_ID_LENGTH_MAX || this.logoutRequestData.user_id.Length < Model.USER_ID_LENGTH_MIN)
+        if (this.logoutRequestData.user_id==0)
         {
             ok = false;
-            this.message = $"不適切なユーザIdです!\n{Model.USER_ID_LENGTH_MIN}文字〜{Model.USER_ID_LENGTH_MAX}文字で入力してください。";
+            this.message = $"ログインしていません。";
         }
-        else if (this.logoutRequestData.session_id.Length > Model.SESSION_ID_LENGTH_MAX || this.logoutRequestData.session_id.Length < Model.SESSION_ID_LENGTH_MIN)
+        else if (string.IsNullOrEmpty(this.logoutRequestData.session_id))
         {
             ok = false;
-            this.message = $"不適切なセッションIdです!\n{Model.SESSION_ID_LENGTH_MIN}文字〜{Model.SESSION_ID_LENGTH_MAX}文字で入力してください。";
+            this.message = $"ログインしていません。";
         }
 
         return ok;

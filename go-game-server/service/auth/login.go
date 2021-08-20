@@ -5,7 +5,6 @@ import (
 	"errors"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/core"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
@@ -53,12 +52,12 @@ func Login(u model.User) (model.Session, error) {
 
 	//if password consistence, create session.
 	ctx := context.TODO()
-	sessionID, err := NewSession(ctx, strconv.FormatUint(u1.ID, 10))
+	sessionID, err := NewSession(ctx, u1.ID)
 	if err != nil {
 		log.Println("failed to generate new session to ", u1.ID)
 		return model.Session{}, err
 	}
 
 	//login success and return
-	return model.Session{UserID: strconv.FormatUint(u1.ID, 10), SessionID: sessionID}, nil
+	return model.Session{UserID: u1.ID, SessionID: sessionID}, nil
 }

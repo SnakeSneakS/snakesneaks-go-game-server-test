@@ -9,15 +9,15 @@ public partial class Model
     [System.Serializable]
     public class Session
     {
-        [UnityEngine.SerializeField] private string user_id;
-        public string UserID {
+        [UnityEngine.SerializeField] private uint user_id;
+        public uint UserID {
             get
             {
                 return this.user_id;
             }
             set
             {
-                this.user_id = (value == null || value.Length > USER_ID_LENGTH_MAX || value.Length<USER_ID_LENGTH_MIN) ? null : value;
+                this.user_id = value;
             }
         }
         [UnityEngine.SerializeField] private string session_id;
@@ -50,7 +50,7 @@ public partial class Model
         /// </summary>
         public Session()
         {
-            this.user_id = null;
+            this.user_id = 0;
             this.session_id = null;
             this.error = true;
         }
@@ -60,13 +60,13 @@ public partial class Model
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="sessionID"></param>
-        public Session(string userID,string sessionID)
+        public Session(uint userID,string sessionID)
         {
             this.user_id = userID;
             this.session_id = sessionID;
             this.error = false;
 
-            if (this.user_id == null || this.session_id == null) this.error = true;
+            if (this.user_id == 0 || this.session_id == null) this.error = true;
         }
     }
 }

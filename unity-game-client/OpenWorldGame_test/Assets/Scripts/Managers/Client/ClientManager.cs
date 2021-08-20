@@ -15,8 +15,10 @@ public class ClientManager : MonoBehaviour
 
     public static void LoadSession()
     {
-        
-        string user_id = PlayerPrefs.GetString(PlayerPrefsSystemDefine.CLIENT_USER_ID);
+
+        uint user_id;
+        try { user_id = System.Convert.ToUInt32(PlayerPrefs.GetString(PlayerPrefsSystemDefine.CLIENT_USER_ID));}
+        catch { user_id = 0; }
         string session_id = PlayerPrefs.GetString(PlayerPrefsSystemDefine.CLIENT_SESSION_ID);
         Session = new Model.Session(user_id,session_id);
         Debug.Log($"Load Session Data\nUserID: {Session.UserID}, SessionID: {Session.SessionID}");
@@ -30,7 +32,7 @@ public class ClientManager : MonoBehaviour
 
     public static void SaveSession()
     {
-        PlayerPrefs.SetString(PlayerPrefsSystemDefine.CLIENT_USER_ID, Session.UserID);
+        PlayerPrefs.SetString(PlayerPrefsSystemDefine.CLIENT_USER_ID, Session.UserID.ToString());
         PlayerPrefs.SetString(PlayerPrefsSystemDefine.CLIENT_SESSION_ID, Session.SessionID);
         Debug.Log($"Save Session Data\nUserID: {Session.UserID}, SessionID: {Session.SessionID}");
     }

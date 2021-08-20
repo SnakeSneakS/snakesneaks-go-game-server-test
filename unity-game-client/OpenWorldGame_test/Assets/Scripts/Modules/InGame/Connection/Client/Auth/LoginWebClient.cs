@@ -95,7 +95,7 @@ public class LoginWebClient : WebClient
     /// <returns></returns>
     protected bool CheckResponseData(LoginResponseData lrd)
     {
-        bool error = (lrd.status == Model.ConnStatus.success && (lrd.session.UserID == "" || lrd.session.SessionID == ""));
+        bool error = (lrd.status == Model.ConnStatus.success && (lrd.session.UserID == 0 || lrd.session.SessionID == ""));
         if (error) this.result = ResultType.ResponseDataError;
         return (!error);
     }

@@ -6,6 +6,6 @@ type GameRes struct {
 }
 
 type GameResUnit struct {
-	UserID  string       `json:"user_id"`
+	UserID  uint         `json:"user_id"`
 	Methods []GameMethod `json:"methods"`
 }

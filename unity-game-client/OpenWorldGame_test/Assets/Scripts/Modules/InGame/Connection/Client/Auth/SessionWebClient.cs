@@ -99,7 +99,7 @@ public class SessionWebClient: WebClient
     protected override bool CheckRequestData()
     {
         bool ok = true;
-        if (this.sessionRequestData.session==null || this.sessionRequestData.session.Error || this.sessionRequestData.session.UserID==null | this.sessionRequestData.session.SessionID==null)
+        if (this.sessionRequestData.session==null || this.sessionRequestData.session.Error || this.sessionRequestData.session.SessionID==null)
         {
             ok = false;
             this.message = $"session data error!";
@@ -109,12 +109,12 @@ public class SessionWebClient: WebClient
             if (this.sessionRequestData.session.SessionID.Length > Model.SESSION_ID_LENGTH_MAX || this.sessionRequestData.session.SessionID.Length < Model.SESSION_ID_LENGTH_MIN)
             {
                 ok = false;
-                this.message = $"不適切なセッションIDです!\n{Model.SESSION_ID_LENGTH_MIN}文字〜{Model.SESSION_ID_LENGTH_MAX}文字で入力してください。";
+                this.message = $"ログインしていません";
             }
-            else if (this.sessionRequestData.session.UserID.Length > Model.USER_ID_LENGTH_MAX || this.sessionRequestData.session.UserID.Length < Model.USER_ID_LENGTH_MIN)
+            else if (this.sessionRequestData.session.UserID==0)
             {
                 ok = false;
-                this.message = $"不適切なパスワードです!\n{Model.USER_ID_LENGTH_MIN}文字〜{Model.USER_ID_LENGTH_MAX}文字で入力してください。";
+                this.message = $"ログインしていません。";
             }
         }
         

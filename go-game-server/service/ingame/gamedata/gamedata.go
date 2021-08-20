@@ -1,4 +1,4 @@
-package ingame
+package gamedata
 
 import (
 	"github.com/gorilla/websocket"
@@ -6,15 +6,3 @@ import (
 )
 
 var InGameClientData = map[*websocket.Conn]gamemodel.GameClient{}
-
-func StartGame() {
-	StartConnMessageManager()
-}
-
-func SendDiffMessageToAll() {
-
-}
-
-func SendAllDataToAll() {
-
-}

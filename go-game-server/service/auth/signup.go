@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"log"
-	"strconv"
 
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/core"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
@@ -35,7 +34,7 @@ func Signup(u model.User) (model.Session, error) {
 
 	//Create session.
 	ctx := context.TODO()
-	sessionID, err := NewSession(ctx, strconv.FormatUint(u.ID, 10))
+	sessionID, err := NewSession(ctx, u.ID)
 	if err != nil {
 		log.Println("failed to generate new session to ", u.ID)
 		return model.Session{}, err
@@ -43,5 +42,5 @@ func Signup(u model.User) (model.Session, error) {
 
 	//login success and return
 	log.Println("sessionID", sessionID)
-	return model.Session{UserID: strconv.FormatUint(u.ID, 10), SessionID: sessionID}, nil
+	return model.Session{UserID: u.ID, SessionID: sessionID}, nil
 }
