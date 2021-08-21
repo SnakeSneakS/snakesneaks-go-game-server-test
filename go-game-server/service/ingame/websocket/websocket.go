@@ -8,7 +8,7 @@ import (
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/ingame/gamedata"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/ingame/websocket/receiver"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/gamemodel"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/ingamemodel"
 )
 
 func NewConnection(w http.ResponseWriter, r *http.Request) {
@@ -25,7 +25,7 @@ func NewConnection(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//SetConnectionData
-	clientData := gamemodel.NewGameClient()
+	clientData := ingamemodel.NewGameClient()
 	gamedata.InGameClientData[conn] = clientData
 
 	for {

@@ -1,4 +1,4 @@
-package gamemodel
+package ingamemodel
 
 type GameRes struct {
 	//Status   model.StatusRes `json:"status"`

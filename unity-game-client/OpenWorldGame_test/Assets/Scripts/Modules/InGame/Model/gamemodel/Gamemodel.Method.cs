@@ -14,11 +14,12 @@ public partial class Gamemodel
     [Serializable]
     public enum GameMethodType
     {
-        Idle,
-        EnterWorld,
-        ExitWorld,
-        Chat,
-        Move,
+        Idle,                   //idle 
+        EnterWorld,             //notify a new user entered world. 
+        ExitWorld,              //notify user exit world. 
+        Chat,                   //notify chat message
+        Move,                   //notify move action
+        GetIngameClientsData,   //get all gameClientData info (receive from server)
     }
 
     //Idle
@@ -54,5 +55,12 @@ public partial class Gamemodel
     public struct MoveMethod
     {
         [SerializeField] public Gamemodel.GameTransform to;
+    }
+
+    //GetData
+    [Serializable]
+    public struct GetIngameClientsData
+    {
+        [SerializeField] public GameClient clients;
     }
 }

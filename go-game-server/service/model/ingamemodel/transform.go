@@ -1,4 +1,4 @@
-package gamemodel
+package ingamemodel
 
 //Transform user location, rotation
 type Transform struct {

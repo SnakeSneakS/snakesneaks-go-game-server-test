@@ -1,8 +1,4 @@
-package gamemodel
-
-import (
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
-)
+package ingamemodel
 
 const (
 	//Game Request Type: ReqType
@@ -11,14 +7,10 @@ const (
 	ExitWorld
 	Chat
 	Move
+	GetIngameClientsInfo // server -> client only
 )
 
 type GemeMethodType int
-
-type GameReq struct {
-	Session     model.Session `json:"session"`
-	GameMethods []GameMethod  `json:"methods"`
-}
 
 type GameMethod struct {
 	MethodType GemeMethodType `json:"method"`

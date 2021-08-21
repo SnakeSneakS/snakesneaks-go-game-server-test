@@ -1,4 +1,4 @@
-package gamemodel
+package ingamemodel
 
 import (
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
@@ -23,8 +23,7 @@ type GameClient struct {
 //GameClientConnection
 type GameClientConnection struct {
 	ConnState ConnectionState `json:"conn_state"`
-	//ConLast  time.Time
-	//Ws       *websocket.Conn
+	//ConnLast  time.Time `json:"conn_last,omitempty"`
 }
 
 //GameClientInfo

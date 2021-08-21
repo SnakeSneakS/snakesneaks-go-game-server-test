@@ -6,8 +6,8 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/ingame/gamedata"
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/gamemodel"
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/gamemodel/gamemethod"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/ingamemodel"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/ingamemodel/gamemethod"
 )
 
 // HandleChatReceivedData return (GameMethod,bool: return true if send method)
@@ -25,5 +25,5 @@ func HandleChatReceivedData(conn *websocket.Conn, content string) {
 	}
 	log.Printf("Received Chat Text: %s\n", chatMethod.Text)
 
-	AddBroadcastMethod(userID, gamemodel.GameMethod{MethodType: gamemodel.Chat, Content: content})
+	AddBroadcastMethod(userID, ingamemodel.GameMethod{MethodType: ingamemodel.Chat, Content: content})
 }
