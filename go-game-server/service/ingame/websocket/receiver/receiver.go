@@ -34,7 +34,7 @@ func HandleMessage(messageType int, message []byte, conn *websocket.Conn) {
 			onSessionFailed(conn)
 			return
 		}
-		switch gamedata.InGameClientData[conn].Conn.ConState {
+		switch gamedata.InGameClientData[conn].Conn.ConnState {
 		case gamemodel.Ready:
 			var err error
 			gamedata.InGameClientData[conn], err = gamemodel.ActivateClient(req.Session.UserID)

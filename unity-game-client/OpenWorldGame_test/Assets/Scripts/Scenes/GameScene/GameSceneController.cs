@@ -11,6 +11,7 @@ public partial class GameSceneController : MonoBehaviour
     [Header("Module")]
     [SerializeField] GameWebSocketClient gameWebSocketClient;
     [SerializeField] GameMethodHandler gameMethodHandler;
+    [SerializeField] IngameManager ingameManager;
 
     const float ConnectionCheckInterval = 5.0f;
 
@@ -18,6 +19,7 @@ public partial class GameSceneController : MonoBehaviour
     {
         this.gameWebSocketClient.Connect();
         this.gameMethodHandler.StartHandler(this.gameWebSocketClient.ws, ClientManager.Session);
+        this.ingameManager = new IngameManager();
     }
 
     private void Start()

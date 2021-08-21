@@ -15,33 +15,38 @@ type ConnectionState int
 
 //GameClientInfo user client data type in game
 type GameClient struct {
-	Info GameClientInfo
-	//IngameInfo IngameInfo
-	Conn GameClientConnection
+	Info       GameClientInfo       `json:"info"`
+	IngameInfo IngameInfo           `json:"ingame_info"`
+	Conn       GameClientConnection `json:"conn"`
 }
 
 //GameClientConnection
 type GameClientConnection struct {
-	ConState ConnectionState
+	ConnState ConnectionState `json:"conn_state"`
 	//ConLast  time.Time
 	//Ws       *websocket.Conn
 }
 
 //GameClientInfo
 type GameClientInfo struct {
-	UserID   uint
-	Username string
+	UserID   uint   `json:"user_id"`
+	Username string `json:"username"`
 }
 
 type IngameInfo struct {
-	Transform Transform
+	Transform Transform `json:"transform"`
+}
+
+func NewIngameInfo() IngameInfo {
+	return IngameInfo{NewTransform(NewVector3(0, 0, 0), NewVector3(0, 0, 0))}
 }
 
 //NewGameClient creates game client already registered
 func NewGameClient() GameClient {
 	clientInfo := GameClientInfo{UserID: 0, Username: ""}
-	clientConn := GameClientConnection{ConState: Ready}
-	return GameClient{Info: clientInfo, Conn: clientConn}
+	clientConn := GameClientConnection{ConnState: Ready}
+	clientIngameInfo := NewIngameInfo()
+	return GameClient{Info: clientInfo, Conn: clientConn, IngameInfo: clientIngameInfo}
 }
 
 //ActivateClient Activate client
@@ -51,6 +56,6 @@ func ActivateClient(userID uint) (GameClient, error) {
 		return NewGameClient(), err
 	}
 	clientInfo := GameClientInfo{UserID: userID, Username: username}
-	clientConn := GameClientConnection{ConState: Active}
+	clientConn := GameClientConnection{ConnState: Active}
 	return GameClient{Info: clientInfo, Conn: clientConn}, nil
 }
