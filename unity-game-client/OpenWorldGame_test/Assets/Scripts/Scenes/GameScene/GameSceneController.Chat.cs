@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 //GameSceneController.Chat
 public partial class GameSceneController : MonoBehaviour
 {
     [Header("Chat")]
     [SerializeField] InputField chatInputField;
-    [SerializeField] Text chatDisplayText;
+    [SerializeField] TextMeshProUGUI chatDisplayText;
     [SerializeField] Button chatSendButton;
 
     private const int chatTextLengthMaxPerUnit = 60;
@@ -25,7 +26,7 @@ public partial class GameSceneController : MonoBehaviour
 
     public void OnReceiveChat(uint user_id, Gamemodel.ChatMethod chatMethod)
     {;
-        string new_text = this.chatDisplayText.text + SerializeText($"{user_id}:\u00A0{chatMethod.text}\n");
+        string new_text = this.chatDisplayText.text + SanitizeRichText($"{user_id}:\u00A0{chatMethod.text}\n");
         chatTextUnitNum++;
         if (chatTextUnitNum > chatTextUnitMax)
         {
@@ -35,15 +36,12 @@ public partial class GameSceneController : MonoBehaviour
         dispatcher.Invoke(() => { this.chatDisplayText.text = new_text; });
     }
 
-    private string SerializeText(string text)
+    private string SanitizeRichText(string text)
     {
         string new_text = text;
         if (new_text.Length > chatTextLengthMaxPerUnit) new_text = new_text.Substring(0, chatTextLengthMaxPerUnit);
-        new_text.Replace("<", "＜");
-        new_text.Replace(">","＞");
-        new_text.Replace("\\","＼");
-        new_text.Replace("/", "／");
-        new_text.Replace(" ", "\u00A0"); //改行しないスペース 
+        new_text.Replace(" ", "\u00A0"); //改行しないスペース
+        new_text = "<noparse>"+new_text+"</noparse>";
         return new_text;
     }
 }
