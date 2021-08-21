@@ -10,8 +10,8 @@ public partial class GameMethodHandler
 
     public struct ChatEventArgs
     {
-        public string user_id;
-        public string text;
+        public uint user_id;
+        public Gamemodel.ChatMethod chatMethod;
     }
     
     /// <summary>
@@ -30,11 +30,11 @@ public partial class GameMethodHandler
     /// Handle Received Message 
     /// </summary>
     /// <param name="json"></param>
-    public void ReceiveChat(string user_id,string json)
+    public void ReceiveChat(uint user_id,string json)
     {
         Gamemodel.ChatMethod chatMethod = JsonUtility.FromJson<Gamemodel.ChatMethod>(json);
-        Debug.Log($"ReceivedChat: \nuser_id: {user_id}, text: {chatMethod.text}");
-        OnChatReceive?.Invoke(new ChatEventArgs {user_id=user_id, text=chatMethod.text });
+        Debug.Log($"ReceivedChat: \nuser_id: {user_id}, chat-text: {chatMethod.text}");
+        OnChatReceive?.Invoke(new ChatEventArgs {user_id=user_id, chatMethod=chatMethod });
     }
     
    

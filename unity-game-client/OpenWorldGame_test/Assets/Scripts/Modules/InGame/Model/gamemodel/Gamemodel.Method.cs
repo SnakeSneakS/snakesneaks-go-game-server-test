@@ -1,7 +1,17 @@
+using System;
+using UnityEngine;
 
 //Gamemodel.GameMethod 
 public partial class Gamemodel
 {
+    [Serializable]
+    public struct GameMethod
+    {
+        [SerializeField] public GameMethodType method;
+        [SerializeField] public string content;  //GameMethod: 
+    }
+
+    [Serializable]
     public enum GameMethodType
     {
         Idle,
@@ -12,33 +22,37 @@ public partial class Gamemodel
     }
 
     //Idle
+    [SerializeField]
     public struct IdleMethod
     {
 
     }
 
     //EnterWorld
+    [SerializeField]
     public struct EnterWorldMethod
     {
 
     }
 
     //ExitWorld
+    [SerializeField]
     public struct ExitWorldMethod
     {
 
     }
 
     //Chat
+    [SerializeField]
     public struct ChatMethod
     {
-        public string text;
+        [SerializeField] public string text;
     }
 
     //Move
+    [Serializable]
     public struct MoveMethod
     {
-        public Gamemodel.GameReqTransform from;
-        public Gamemodel.GameReqTransform to;
+        [SerializeField] public Gamemodel.GameTransform to;
     }
 }

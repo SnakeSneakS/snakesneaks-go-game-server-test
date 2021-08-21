@@ -95,7 +95,7 @@ public partial class GameMethodHandler : MonoBehaviour
         {
             foreach(Gamemodel.GameResUnit gameResUnit in gameRes.response)
             {
-                string user_id = gameResUnit.user_id;
+                uint user_id = gameResUnit.user_id;
                 Gamemodel.GameMethod[] methods = gameResUnit.methods;
                 foreach(Gamemodel.GameMethod method in methods)
                 {

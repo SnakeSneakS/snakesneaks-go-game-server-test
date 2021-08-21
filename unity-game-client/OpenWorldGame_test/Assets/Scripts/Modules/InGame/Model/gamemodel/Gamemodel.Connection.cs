@@ -16,7 +16,7 @@ public partial class Gamemodel
     [Serializable]
     public struct GameResUnit
     {
-        [SerializeField] public string          user_id;
+        [SerializeField] public uint            user_id;
         [SerializeField] public GameMethod[]    methods;
     }
 
@@ -27,10 +27,5 @@ public partial class Gamemodel
         [SerializeField] public GameMethod[]    methods;
     }
 
-    [Serializable]
-    public struct GameMethod
-    {
-        [SerializeField] public GameMethodType  method;
-        [SerializeField] public string          content; 
-    }
+    
 }

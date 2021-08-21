@@ -35,6 +35,12 @@ public partial class GameSceneController : MonoBehaviour
             Debug.Log("Connection Failed!");
             OnConnectionOut();
         };
+        //when connection failed
+        this.gameWebSocketClient.ws.OnError += (sender, e) =>
+        {
+            Debug.Log("Connection Error!");
+            OnConnectionOut();
+        };
         //when GameMethodHandler Failed
         this.gameMethodHandler.OnGameMethodHandlerFailed += (sender, e) =>
         {
@@ -44,8 +50,8 @@ public partial class GameSceneController : MonoBehaviour
         //chat receive
         this.gameMethodHandler.OnChatReceive += (e) =>
         {
-            Debug.Log($"Ingame Chat Received: \nuser_id: {e.user_id}, text: {e.text}");
-            OnReceiveChat(e.user_id, e.text);
+            Debug.Log($"Ingame Chat Received: \nuser_id: {e.user_id}, text: {e.chatMethod.text}");
+            OnReceiveChat(e.user_id, e.chatMethod);
         };
         //Session Failed event
         this.gameMethodHandler.OnSessionFailed += (sender,e) =>
@@ -68,6 +74,7 @@ public partial class GameSceneController : MonoBehaviour
             SendChat();
         });
     }
+
 
     public void Quit()
     {

@@ -12,7 +12,14 @@ public partial class GameSceneController : MonoBehaviour
         Debug.Log("<color=\"red\">Connection Out!!</color>");
         dispatcher.Invoke(() =>
         {
-            Quit();
+            //Quit();
+            RequireReLogin();
         });
+    }
+
+    private void RequireReLogin()
+    {
+        Debug.Log("Require Re-Login.");
+        SceneManager.LoadScene(SceneManager.SceneName.Title);
     }
 }

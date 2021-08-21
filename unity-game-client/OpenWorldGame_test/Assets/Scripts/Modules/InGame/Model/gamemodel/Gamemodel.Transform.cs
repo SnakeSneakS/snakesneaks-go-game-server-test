@@ -8,12 +8,12 @@ public partial class Gamemodel
 /// Transform Class used for Game Request
 /// </summary>
 [Serializable]
-public class GameReqTransform
+public class GameTransform
 {
-    [SerializeField] private Vector3 position;
-    [SerializeField] private Vector3 rotation;
+    [SerializeField] public Vector3 position;
+    [SerializeField] public Vector3 rotation;
 
-    public GameReqTransform(Transform transform)
+    public GameTransform(Transform transform)
     {
         this.position = transform.position;
         this.rotation = new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z);
