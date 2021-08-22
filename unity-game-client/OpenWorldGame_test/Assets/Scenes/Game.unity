@@ -1942,8 +1942,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Hello, world!! \n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 856f5aafd831c4bb6929a66c874cc10a, type: 2}
-  m_sharedMaterial: {fileID: 845531371195417889, guid: 856f5aafd831c4bb6929a66c874cc10a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 52cdfd18bb4c04b2bbc3a3085cb52ac0, type: 2}
+  m_sharedMaterial: {fileID: 5638317197310706284, guid: 52cdfd18bb4c04b2bbc3a3085cb52ac0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2428,5 +2428,17 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 2100399883}
+    - target: {fileID: 9002023280011635680, guid: b2863bf5f989d4bf3989a08547ed491b, type: 3}
+      propertyPath: m_text
+      value: "\u6B4C\u59EB"
+      objectReference: {fileID: 0}
+    - target: {fileID: 9002023280011635680, guid: b2863bf5f989d4bf3989a08547ed491b, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 52cdfd18bb4c04b2bbc3a3085cb52ac0, type: 2}
+    - target: {fileID: 9002023280011635680, guid: b2863bf5f989d4bf3989a08547ed491b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 5638317197310706284, guid: 52cdfd18bb4c04b2bbc3a3085cb52ac0, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2863bf5f989d4bf3989a08547ed491b, type: 3}
