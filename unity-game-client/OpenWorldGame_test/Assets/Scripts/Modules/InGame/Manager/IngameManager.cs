@@ -6,27 +6,27 @@ using UnityEngine;
 //ゲームデータの保存など。
 public class IngameManager 
 {
-    public Dictionary<uint,Gamemodel.GameClient> GameClientsData = new Dictionary<uint, Gamemodel.GameClient>(); //user_id, gameclient
+    public Dictionary<uint,Gamemodel.IngameClient> GameClientsData = new Dictionary<uint, Gamemodel.IngameClient>(); //user_id, gameclient
 
     public IngameManager()
     {
-        this.GameClientsData = new Dictionary<uint, Gamemodel.GameClient>();
+        this.GameClientsData = new Dictionary<uint, Gamemodel.IngameClient>();
     }
 
-    public IngameManager(Gamemodel.GameClient[] gameClientsData)
+    public IngameManager(Gamemodel.IngameClient[] gameClientsData)
     {
-        this.GameClientsData = new Dictionary<uint, Gamemodel.GameClient>();
+        this.GameClientsData = new Dictionary<uint, Gamemodel.IngameClient>();
         for (int i = 0; i < gameClientsData.Length; i++)
         {
             this.GameClientsData.Add(gameClientsData[i].info.user_id, gameClientsData[i]);
         }
     }
 
-    public Gamemodel.GameClient GetGameClientData(uint user_id)
+    public Gamemodel.IngameClient GetGameClientData(uint user_id)
     {
-        Gamemodel.GameClient gameClient;
-        if (GameClientsData.ContainsKey(user_id)) gameClient = new Gamemodel.GameClient { };
+        Gamemodel.IngameClient gameClient;
+        if (GameClientsData.ContainsKey(user_id)) gameClient = new Gamemodel.IngameClient { };
         //return
-        return new Gamemodel.GameClient { };
+        return new Gamemodel.IngameClient { };
     }
 }

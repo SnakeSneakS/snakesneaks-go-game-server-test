@@ -5,7 +5,7 @@ using UnityEngine;
 public partial class Gamemodel 
 {
     [Serializable]
-    public enum ClientConnectionState
+    public enum IngameClientConnectionState
     {
         Ready,
         Active,
@@ -13,7 +13,7 @@ public partial class Gamemodel
     }
 
     [Serializable]
-    public struct GameClient
+    public struct IngameClient
     {
         [SerializeField] public GameClientConnection conn;
         [SerializeField] public GameClientInfo info;
@@ -23,7 +23,7 @@ public partial class Gamemodel
     [Serializable]
     public struct GameClientConnection
     {
-        [SerializeField] public ClientConnectionState conn_state;
+        [SerializeField] public IngameClientConnectionState conn_state;
     }
 
     [Serializable]

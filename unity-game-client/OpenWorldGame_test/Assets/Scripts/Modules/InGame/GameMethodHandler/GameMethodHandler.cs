@@ -12,7 +12,7 @@ public partial class GameMethodHandler : MonoBehaviour
     private Model.Session session;
     private WebSocket webSocket;
 
-    private bool isWorking;
+    private bool isWorking=false;
 
     public event EventHandler OnSessionFailed;
     public event EventHandler OnGameMethodHandlerFailed;
@@ -21,7 +21,7 @@ public partial class GameMethodHandler : MonoBehaviour
     {
         if (isWorking == true)
         {
-            Debug.Log("Already Connected");
+            Debug.Log("Already Started GameMethod Handler.");
             return;
         }
         storedMethods = new List<Gamemodel.GameMethod>();
@@ -104,6 +104,7 @@ public partial class GameMethodHandler : MonoBehaviour
                         case Gamemodel.GameMethodType.Idle:
                             break;
                         case Gamemodel.GameMethodType.EnterWorld:
+                            ReceiveEnterWorld(user_id, method.content);
                             break;
                         case Gamemodel.GameMethodType.ExitWorld:
                             break;
@@ -111,6 +112,9 @@ public partial class GameMethodHandler : MonoBehaviour
                             ReceiveChat(user_id,method.content);
                             break;
                         case Gamemodel.GameMethodType.Move:
+                            break;
+                        case Gamemodel.GameMethodType.GetIngameClientsData:
+                            ReceiveGetIngameClientsData(user_id, method.content);
                             break;
                     }
                 }

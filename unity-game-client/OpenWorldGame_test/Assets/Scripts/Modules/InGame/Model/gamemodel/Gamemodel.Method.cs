@@ -33,7 +33,7 @@ public partial class Gamemodel
     [SerializeField]
     public struct EnterWorldMethod
     {
-
+        [SerializeField] public Gamemodel.IngameClient ingame_client_data;
     }
 
     //ExitWorld
@@ -61,6 +61,6 @@ public partial class Gamemodel
     [Serializable]
     public struct GetIngameClientsData
     {
-        [SerializeField] public GameClient clients;
+        [SerializeField] public IngameClient[] clients;
     }
 }

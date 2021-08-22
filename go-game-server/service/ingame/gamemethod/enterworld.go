@@ -37,7 +37,20 @@ func HandleEnterWorldReceivedData(UserID uint, conn *websocket.Conn) error {
 	}
 
 	//send to new entered user
-	methods := []ingamemodel.GameMethod{{MethodType: ingamemodel.GetIngameClientsInfo}}
+	data := gamemethod.GetIngameClientsData{
+		Clients: []ingamemodel.GameClient{},
+	}
+	for _, v := range gamedata.InGameClientData {
+		data.Clients = append(data.Clients, v)
+	}
+
+	var content []byte
+	content, err = json.Marshal(&data)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	methods := []ingamemodel.GameMethod{{MethodType: ingamemodel.GetIngameClientsInfo, Content: string(content)}}
 	resUnit := []ingamemodel.GameResUnit{{UserID: UserID, Methods: methods}}
 	res := ingamemodel.GameRes{Response: resUnit}
 	message, err := json.Marshal(res)

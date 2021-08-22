@@ -95,8 +95,10 @@ public class TitleSceneManager : MonoBehaviour
                     ConnError();
                     break;
             }
+            isGameStart = false;
+
         }
-        
+
     }
 
     public void SessionSuccess()

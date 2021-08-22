@@ -27,6 +27,9 @@ public partial class GameSceneController : MonoBehaviour
         SetUpButtonEvent();
         SetUpConnectionEvent();
         StartDispatcher();
+
+        //Send Enterworld Message to Server 
+        this.gameMethodHandler.SendEnterWorld();
     }
 
     private void SetUpConnectionEvent()
@@ -49,11 +52,23 @@ public partial class GameSceneController : MonoBehaviour
             Debug.LogError("Stopped");
             OnConnectionOut();
         };
-        //chat receive
+        //receive chat 
         this.gameMethodHandler.OnChatReceive += (e) =>
         {
             Debug.Log($"Ingame Chat Received: \nuser_id: {e.user_id}, text: {e.chatMethod.text}");
             OnReceiveChat(e.user_id, e.chatMethod);
+        };
+        //receive enterworld 
+        this.gameMethodHandler.OnEnterWorldReceive += (e) =>
+        {
+            Debug.Log($"Ingame EnterWorld Received: \nuser_id: {e.user_id}, username: {e.enterWorldMethod.ingame_client_data.info.username}");
+            OnReceiveEnterWorld(e.user_id, e.enterWorldMethod);
+        };
+        //receive getIngameClientsData
+        this.gameMethodHandler.OnGetIngameClientsDataReceive += (e) =>
+        {
+            Debug.Log($"Ingame GetIngameClientsInfo Received: \nuser_id: {e.user_id}");
+            OnReceivedGetIngameClientsInfo(e.user_id, e.getIngameClientsData);
         };
         //Session Failed event
         this.gameMethodHandler.OnSessionFailed += (sender,e) =>

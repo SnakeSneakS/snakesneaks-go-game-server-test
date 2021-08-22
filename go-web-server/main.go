@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -54,6 +53,7 @@ func main() {
 	router.Static("/statics", "./statics")
 	router.LoadHTMLGlob("templates/*.html")
 
+	//Web Page
 	router.GET("/", func(ctx *gin.Context) {
 		//User
 		db := sqlConnect()
@@ -73,6 +73,7 @@ func main() {
 				ctx.HTML(200, "index.html", gin.H{
 					"users": users,
 				})
+				return
 			}
 			defer res.Body.Close()
 			if res.StatusCode != 200 {
@@ -89,6 +90,7 @@ func main() {
 				ctx.HTML(200, "index.html", gin.H{
 					"users": users,
 				})
+				return
 			}
 			log.Print(mapData)
 			for k, v := range mapData {
@@ -108,26 +110,21 @@ func main() {
 		return
 	})
 
+	//Signup
 	router.POST("/signup", func(ctx *gin.Context) {
 		username := ctx.PostForm("username")
 		email := ctx.PostForm("email")
 		password := ctx.PostForm("password")
-		hostname := os.Getenv("GO_GAME_SERVER_CONTAINER_NAME")
 
-		b, err := json.Marshal(model.UserReq{User: model.User{Username: username, Email: email, Password: password}})
-		fmt.Printf("Send Data: \n%s", b)
-		bb := bytes.NewBuffer(b)
-		res, err := http.Post(fmt.Sprintf("http://%s:%s/api/auth/signup", hostname, os.Getenv("GO_GAME_SERVER_PORT")), "application/json", bb)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer res.Body.Close()
-		if res.StatusCode != 200 {
-			fmt.Printf("StatusCode=%d\n", res.StatusCode)
+		//save user data to mysql database
+		u := model.User{Username: username, Email: email, Password: password}
+		if _, err := auth.Signup(u); err != nil {
+			log.Println("Failed to create new User!")
 			return
 		}
 
 		ctx.Redirect(302, "/")
+		return
 	})
 
 	/*

@@ -1,11 +1,13 @@
 package sender
 
 import (
+	"fmt"
 	"log"
 	"time"
 
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/ingame/gamedata"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/ingame/gamemethod"
+	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/ingamemodel"
 )
 
 const (
@@ -30,7 +32,12 @@ func StartMessageSender() {
 		for {
 			m := <-broadcast
 			log.Println("Send Data To All Connections")
-			for conn, _ := range gamedata.InGameClientData {
+			for conn, data := range gamedata.InGameClientData {
+				//limit only active ingame client
+				if data.Conn.ConnState != ingamemodel.Active {
+					log.Println(fmt.Sprintf("User(id: %d) is not active, so ignore when broadcast", data.Info.UserID))
+					return
+				}
 				if err := conn.WriteMessage(m.MessageType, m.Message); err != nil {
 					log.Println(err)
 					return
