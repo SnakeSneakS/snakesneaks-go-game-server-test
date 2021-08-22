@@ -24,7 +24,7 @@ public partial class GameSceneController : MonoBehaviour
 
     private void Start()
     {
-        SetUpButtonEvent();
+        SetUpUiInteractionEvent();
         SetUpConnectionEvent();
         StartDispatcher();
 
@@ -83,13 +83,14 @@ public partial class GameSceneController : MonoBehaviour
         UpdateDispatcher();
     }
 
-    private void SetUpButtonEvent()
+    private void SetUpUiInteractionEvent()
     {
         //SendChat  
-        chatSendButton.onClick.AddListener(() =>
+        /*chatSendButton.onClick.AddListener(() =>
         {
             SendChat();
-        });
+        });*/
+        chatInputField.onEndEdit.AddListener((string text) => { SendChat(); });
     }
 
 
