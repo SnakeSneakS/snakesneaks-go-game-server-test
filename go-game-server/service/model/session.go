@@ -4,7 +4,7 @@ import "time"
 
 //Session session
 type Session struct {
-	UserID    uint   `json:"user_id"`    //redis key
+	UserID    uint32 `json:"user_id"`    //redis key
 	SessionID string `json:"session_id"` //redis value
 }
 

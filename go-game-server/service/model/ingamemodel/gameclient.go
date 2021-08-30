@@ -28,7 +28,7 @@ type GameClientConnection struct {
 
 //GameClientInfo
 type GameClientInfo struct {
-	UserID   uint   `json:"user_id"`
+	UserID   uint32 `json:"user_id"`
 	Username string `json:"username"`
 }
 
@@ -49,7 +49,7 @@ func NewGameClient() GameClient {
 }
 
 //ActivateClient Activate client
-func ActivateClient(userID uint) (GameClient, error) {
+func ActivateClient(userID uint32) (GameClient, error) {
 	username, err := model.GetUsername(userID)
 	if err != nil {
 		return NewGameClient(), err

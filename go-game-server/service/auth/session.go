@@ -13,7 +13,7 @@ import (
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model"
 )
 
-var SessionData map[uint]SessionInf
+var SessionData map[uint32]SessionInf
 
 const (
 	sessionIDsize        = 32
@@ -30,7 +30,7 @@ type SessionInf struct {
 
 //StartSessionManegement manage session
 func StartSessionManegement() {
-	SessionData = map[uint]SessionInf{}
+	SessionData = map[uint32]SessionInf{}
 
 	go func() {
 		for {
@@ -48,7 +48,7 @@ func StartSessionManegement() {
 }
 
 //NewSession creates and save new session
-func NewSession(ctx context.Context, userID uint) (string, error) {
+func NewSession(ctx context.Context, userID uint32) (string, error) {
 	//create rondom session id
 	m_sessionID, err := generateRandomString(sessionIDsize)
 	if err != nil {
@@ -89,7 +89,7 @@ func generateRandomString(size int) (string, error) {
 }
 
 // GetSessionData get sessionId (for CheckSession)
-func GetSessionData(ctx context.Context, userID uint) (string, error) {
+func GetSessionData(ctx context.Context, userID uint32) (string, error) {
 	session, ok := SessionData[userID]
 	if ok != true {
 		return "", errors.New("Session Data Not Found")
@@ -99,7 +99,7 @@ func GetSessionData(ctx context.Context, userID uint) (string, error) {
 }
 
 //setSessionData set session to redis database (login)
-func setSessionData(ctx context.Context, userID uint, sessionID string) error {
+func setSessionData(ctx context.Context, userID uint32, sessionID string) error {
 	m_sessionInf := SessionInf{
 		SessionID: sessionID,
 		Updated:   time.Now(),
@@ -109,7 +109,7 @@ func setSessionData(ctx context.Context, userID uint, sessionID string) error {
 }
 
 //deleteSessionData delete session (logout)
-func deleteSessionData(userID uint) error {
+func deleteSessionData(userID uint32) error {
 	delete(SessionData, userID)
 
 	log.Printf("delete session: key(%d)", userID)
@@ -117,7 +117,7 @@ func deleteSessionData(userID uint) error {
 }
 
 //CheckSession checks if session is already stored in redis database (every time)
-func CheckSession(ctx context.Context, userID uint, sessionID string) error {
+func CheckSession(ctx context.Context, userID uint32, sessionID string) error {
 	session, ok := SessionData[userID]
 	if ok != true {
 		log.Printf("Session Data Not Found")

@@ -44,7 +44,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	//success
 	log.Println("Login success")
-	log.Printf("userID: %s, sessionID: %s\n", session.UserID, session.SessionID)
+	log.Printf("userID: %d, sessionID: %s\n", session.UserID, session.SessionID)
 	loginSuccessWrite(w, session)
 	return
 }

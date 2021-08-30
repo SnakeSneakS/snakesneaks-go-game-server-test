@@ -12,7 +12,7 @@ import (
 
 //User user
 type User struct {
-	ID        uint      `gorm:"column:id;primaryKey;" json:"id"`
+	ID        uint32    `gorm:"column:id;primaryKey;" json:"id"`
 	Username  string    `gorm:"column:username;type:varchar(255);" json:"username"`
 	Email     string    `gorm:"column:email;type:varchar(255);unique;" json:"email"`
 	Password  string    `gorm:"column:password;type:varchar(255);" json:"password"`
@@ -40,7 +40,7 @@ func UserReqHTTP(r io.Reader, src interface{}) error {
 }
 
 //GetUser returns User
-func GetUsername(UserID uint) (string, error) {
+func GetUsername(UserID uint32) (string, error) {
 	m := mysql.NewMysql()
 	defer m.Close()
 

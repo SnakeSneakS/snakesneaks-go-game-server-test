@@ -8,7 +8,7 @@ import (
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/model/ingamemodel"
 )
 
-var StoredBroadcastMethods map[uint]([]ingamemodel.GameMethod) = map[uint]([]ingamemodel.GameMethod){}
+var StoredBroadcastMethods map[uint32]([]ingamemodel.GameMethod) = map[uint32]([]ingamemodel.GameMethod){}
 
 type MessageSet struct {
 	MessageType int
@@ -16,7 +16,7 @@ type MessageSet struct {
 }
 
 //Add Method to send
-func AddBroadcastMethod(userID uint, gameMethod ingamemodel.GameMethod) {
+func AddBroadcastMethod(userID uint32, gameMethod ingamemodel.GameMethod) {
 	methods, ok := StoredBroadcastMethods[userID]
 	if ok != true {
 		StoredBroadcastMethods[userID] = []ingamemodel.GameMethod{gameMethod}
@@ -39,7 +39,7 @@ func SendBroadcastMethod(broadcast chan MessageSet) {
 		resUnit := ingamemodel.GameResUnit{UserID: user_id, Methods: methods}
 		res.Response = append(res.Response, resUnit)
 	}
-	StoredBroadcastMethods = map[uint]([]ingamemodel.GameMethod){}
+	StoredBroadcastMethods = map[uint32]([]ingamemodel.GameMethod){}
 
 	message, err := json.Marshal(res)
 	if err != nil {

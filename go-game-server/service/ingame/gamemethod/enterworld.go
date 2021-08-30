@@ -14,7 +14,7 @@ import (
 )
 
 // HandleEnterWorldReceivedData when a new user entered world and established WebSocket connection
-func HandleEnterWorldReceivedData(UserID uint, conn *websocket.Conn) error {
+func HandleEnterWorldReceivedData(UserID uint32, conn *websocket.Conn) error {
 	log.Printf("Received Enter World: %d\n", UserID)
 
 	//Check connection's existance
