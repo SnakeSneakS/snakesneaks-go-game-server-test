@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 	"unsafe"
 
 	"github.com/gorilla/websocket"
@@ -14,7 +15,7 @@ import (
 )
 
 // HandleEnterWorldReceivedData when a new user entered world and established WebSocket connection
-func HandleEnterWorldReceivedData(UserID uint32, conn *websocket.Conn) error {
+func HandleEnterWorldReceivedData(UserID uint32, Content string, conn *websocket.Conn) error {
 	log.Printf("Received Enter World: %d\n", UserID)
 
 	//Check connection's existance
@@ -30,13 +31,20 @@ func HandleEnterWorldReceivedData(UserID uint32, conn *websocket.Conn) error {
 	}
 
 	//Activate User
-	var err error
-	gamedata.InGameClientData[conn], err = ingamemodel.ActivateClient(UserID)
-	if err != nil {
-		return err
+	if os.Getenv("CREATE_ACCOUNT") != "True" {
+		err := EnterWorldFromRequest(UserID, Content, conn)
+		if err != nil {
+			return err
+		}
+	} else {
+		err := EnterWorldFromStoredData(UserID, conn)
+		if err != nil {
+			return err
+		}
 	}
 
 	//send to new entered user
+	var err error
 	data := gamemethod.GetIngameClientsData{
 		Clients: []ingamemodel.GameClient{},
 	}
@@ -70,5 +78,28 @@ func HandleEnterWorldReceivedData(UserID uint32, conn *websocket.Conn) error {
 		log.Printf("Failed to marshal enterWorld method. UserID(%d)\n", UserID)
 	}
 	AddBroadcastMethod(UserID, ingamemodel.GameMethod{MethodType: ingamemodel.EnterWorld, Content: *(*string)(unsafe.Pointer(&json))})
+	return nil
+}
+
+func EnterWorldFromRequest(UserID uint32, Content string, conn *websocket.Conn) error {
+
+	var enterWorldMethod gamemethod.EnterWorldMethod
+	if err := json.Unmarshal([]byte(Content), &enterWorldMethod); err != nil {
+		log.Printf("Failed to unmarshal chat method %s\n", Content)
+	}
+	log.Printf("Received EnterWorld Method, UserID: %d\n", enterWorldMethod.IngameClientData.Info.UserID)
+
+	clientInfo := ingamemodel.GameClientInfo{UserID: UserID, Username: enterWorldMethod.IngameClientData.Info.Username}
+	clientConn := ingamemodel.GameClientConnection{ConnState: ingamemodel.Active}
+	gamedata.InGameClientData[conn] = ingamemodel.GameClient{Info: clientInfo, Conn: clientConn}
+	return nil
+}
+
+func EnterWorldFromStoredData(UserID uint32, conn *websocket.Conn) error {
+	var err error
+	gamedata.InGameClientData[conn], err = ingamemodel.ActivateClient(UserID)
+	if err != nil {
+		return err
+	}
 	return nil
 }

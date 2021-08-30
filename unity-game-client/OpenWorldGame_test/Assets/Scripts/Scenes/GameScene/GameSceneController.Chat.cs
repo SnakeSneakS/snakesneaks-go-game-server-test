@@ -27,7 +27,7 @@ public partial class GameSceneController : MonoBehaviour
     public void OnReceiveChat(uint user_id, Gamemodel.ChatMethod chatMethod)
     {
         string name = user_id.ToString();
-        try { name = this.ingameManager.GameClientsData[user_id].info.username; }
+        try { name = this.ingameManager.IngameClientsData[user_id].info.username; }
         catch { Debug.LogError($"Failed to find gameClientData[{user_id}]!"); }
         string new_text = this.chatDisplayText.text + SanitizeRichText($"{name}:\u00A0{chatMethod.text}\n");
         chatTextUnitNum++;

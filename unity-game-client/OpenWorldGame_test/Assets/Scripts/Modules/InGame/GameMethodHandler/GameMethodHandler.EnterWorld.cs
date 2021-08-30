@@ -17,7 +17,15 @@ public partial class GameMethodHandler
     /// </summary>
     public void SendEnterWorld()
     {
-        Gamemodel.EnterWorldMethod enterWorldMethod = new Gamemodel.EnterWorldMethod {};
+        Gamemodel.EnterWorldMethod enterWorldMethod = new Gamemodel.EnterWorldMethod {
+            ingame_client_data = new Gamemodel.IngameClient() {
+                info=new Gamemodel.IngameClientInfo {
+                    user_id=ClientManager.Session.UserID,
+                    username=ClientManager.Username
+                }
+            },
+        };
+
         string content = JsonUtility.ToJson(enterWorldMethod);
         Gamemodel.GameMethod gameMethod = new Gamemodel.GameMethod { method = Gamemodel.GameMethodType.EnterWorld, content = content };
         Add(gameMethod);

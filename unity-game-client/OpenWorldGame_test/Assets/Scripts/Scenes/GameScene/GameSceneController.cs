@@ -19,7 +19,6 @@ public partial class GameSceneController : MonoBehaviour
     {
         this.gameWebSocketClient.Connect();
         this.gameMethodHandler.StartHandler(this.gameWebSocketClient.ws, ClientManager.Session);
-        this.ingameManager = new IngameManager();
     }
 
     private void Start()

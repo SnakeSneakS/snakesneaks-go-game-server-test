@@ -14,15 +14,16 @@ public partial class GameSceneController : MonoBehaviour
 
     public void InitializeNewIngameClient(uint user_id, Gamemodel.EnterWorldMethod enterWorldMethod)
     {
+        Debug.Log($"NEW USER: {user_id}");
         try
         {
-            this.ingameManager.GameClientsData.Add(user_id, enterWorldMethod.ingame_client_data);
-            //オブジェクトの生成などの処理を行う。
-        }
-        catch(Exception e)
+            dispatcher.Invoke(() =>
+            {
+                this.ingameManager.NewIngameClient(user_id, enterWorldMethod.ingame_client_data);
+            });
+        }catch(Exception e)
         {
             Debug.LogError(e);
-            Debug.LogError("このユーザは既に存在しています。");
         }
     }
 }

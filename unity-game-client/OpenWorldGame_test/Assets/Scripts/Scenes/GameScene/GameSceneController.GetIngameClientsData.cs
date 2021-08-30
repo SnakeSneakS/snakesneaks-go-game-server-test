@@ -16,7 +16,18 @@ public partial class GameSceneController : MonoBehaviour
         {
             if (clientsData.clients[i].info.user_id != ClientManager.Session.UserID)
             {
-                this.ingameManager.GameClientsData.Add(clientsData.clients[i].info.user_id, clientsData.clients[i]);
+                Debug.Log($"NEW USER: {clientsData.clients[i].info.user_id}");
+                try
+                {
+                    dispatcher.Invoke(() =>
+                    {
+                        this.ingameManager.NewIngameClient(clientsData.clients[i].info.user_id, clientsData.clients[i]);
+                    });
+                }
+                catch(System.Exception e)
+                {
+                    Debug.LogError(e);
+                }
             }
         }
         

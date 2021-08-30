@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using TMPro;
 
 //Gamemodel.Gameclient 
 public partial class Gamemodel 
@@ -15,28 +16,34 @@ public partial class Gamemodel
     [Serializable]
     public struct IngameClient
     {
-        [SerializeField] public GameClientConnection conn;
-        [SerializeField] public GameClientInfo info;
-        [SerializeField] public GameClientIngameInfo ingame_info;
+        [SerializeField] public IngameClientConnection conn;
+        [SerializeField] public IngameClientInfo info;
+        [SerializeField] public IngameClientIngameInfo ingame_info;
     }
 
     [Serializable]
-    public struct GameClientConnection
+    public struct IngameClientConnection
     {
         [SerializeField] public IngameClientConnectionState conn_state;
     }
 
     [Serializable]
-    public struct GameClientInfo
+    public struct IngameClientInfo
     {
         [SerializeField] public uint user_id;
         [SerializeField] public string username;
     }
 
     [Serializable]
-    public struct GameClientIngameInfo
+    public struct IngameClientIngameInfo
     {
         [SerializeField] public GameTransform transform;
     }
-    
+
+    [Serializable]
+    public struct IngameClientInstance
+    {
+        [SerializeField] public GameObject player; //動くプレイヤー
+        [SerializeField] public PlayerController playerController; //プレイヤーを動かすコントローラ
+    }
 }

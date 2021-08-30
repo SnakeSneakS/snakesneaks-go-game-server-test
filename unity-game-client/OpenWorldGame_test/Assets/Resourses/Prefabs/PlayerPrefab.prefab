@@ -103,8 +103,9 @@ GameObject:
   - component: {fileID: 9002023278696271775}
   - component: {fileID: 9002023278696271774}
   - component: {fileID: 9002023278696271773}
+  - component: {fileID: 1073554111}
   m_Layer: 0
-  m_Name: MoveCubePrefab
+  m_Name: PlayerPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -187,6 +188,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1073554111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9002023278696271772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc4513e24c2a8446baeed4dc1295e86e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  usernameTmp: {fileID: 9002023280011635680}
 --- !u!1 &9002023279655973335
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,8 +368,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: USERNAME
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 856f5aafd831c4bb6929a66c874cc10a, type: 2}
-  m_sharedMaterial: {fileID: 845531371195417889, guid: 856f5aafd831c4bb6929a66c874cc10a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 52cdfd18bb4c04b2bbc3a3085cb52ac0, type: 2}
+  m_sharedMaterial: {fileID: 5638317197310706284, guid: 52cdfd18bb4c04b2bbc3a3085cb52ac0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

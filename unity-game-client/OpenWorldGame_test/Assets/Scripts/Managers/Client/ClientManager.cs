@@ -7,10 +7,14 @@ public class ClientManager : MonoBehaviour
 {
     public static Model.Session Session=new Model.Session();
 
+    public static string Username = "";
+
+
     //Load
     public static void LoadLocalData()
     {
         LoadSession();
+        LoadUsername();
     }
 
     public static void LoadSession()
@@ -24,10 +28,18 @@ public class ClientManager : MonoBehaviour
         Debug.Log($"Load Session Data\nUserID: {Session.UserID}, SessionID: {Session.SessionID}");
     }
 
+    public static void LoadUsername()
+    {
+        Username = PlayerPrefs.GetString(PlayerPrefsSystemDefine.CLIENT_USERNAME);
+        Debug.Log($"Load Username Data\nUsername: {Username}");
+    }
+
+
     //Save
     public static void SaveLocalData()
     {
         SaveSession();
+        SaveUsername();
     }
 
     public static void SaveSession()
@@ -37,10 +49,22 @@ public class ClientManager : MonoBehaviour
         Debug.Log($"Save Session Data\nUserID: {Session.UserID}, SessionID: {Session.SessionID}");
     }
 
+    public static void SaveUsername()
+    {
+        PlayerPrefs.SetString(PlayerPrefsSystemDefine.CLIENT_USERNAME, Username);
+        Debug.Log($"Save Username Data\nUsername: {Username}");
+    }
+
+
     //Update: like when session expired
     public static void UpdateSession(Model.Session session) {
         Session = session;
-        Debug.Log($"Session Updated!\nUserID: {session.UserID}, SessionID: {session.SessionID}");
         SaveSession();
+    }
+
+    public static void UpdateUsername(string username)
+    {
+        Username = username;
+        SaveUsername();
     }
 }

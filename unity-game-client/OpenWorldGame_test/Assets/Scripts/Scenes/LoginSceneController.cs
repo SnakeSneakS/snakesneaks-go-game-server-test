@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class LoginSceneController : MonoBehaviour
 {
     [Header("Form")]
+    [SerializeField] InputField UsernameInputField;
     [SerializeField] InputField EmailInputField;
     [SerializeField] InputField PasswordInputField;
     [SerializeField] Button     Login_RequestButton;
@@ -122,9 +123,11 @@ public class LoginSceneController : MonoBehaviour
     {
         isLoginChallenge = true;
 
+        string username = UsernameInputField.text;
         string email = EmailInputField.text;
         string password = PasswordInputField.text;
-        signupWebClient.SetData(email, password);
+        ClientManager.UpdateUsername(username);
+        signupWebClient.SetData(username, email, password);
         yield return StartCoroutine(signupWebClient.Send());
 
         //処理

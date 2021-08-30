@@ -87,7 +87,7 @@ public class HttpPostTestScene : MonoBehaviour
         string username = Signup_UsernameInputField.text;
         string email = Signup_EmailInputField.text;
         string password = Signup_PasswordInputField.text;
-        signupWebClient.SetData(email, password);
+        signupWebClient.SetData(username, email, password);
         yield return StartCoroutine(signupWebClient.Send());
 
         //処理

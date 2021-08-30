@@ -16,16 +16,19 @@ public class SignupWebClient : WebClient
     [Serializable]
     public struct SignupRequestData
     {
+        [SerializeField] public string username;
         [SerializeField] public string email;
         [SerializeField] public string password;
 
         /// <summary>
         /// COnstructor
         /// </summary>
+        /// <param name="username"></param>
         /// <param name="email"></param>
         /// <param name="password"></param>
-        public SignupRequestData(string email,string password)
+        public SignupRequestData(string username, string email,string password)
         {
+            this.username = username;
             this.email = email;
             this.password = password;
         }
@@ -72,19 +75,20 @@ public class SignupWebClient : WebClient
     /// <param name="hostname"></param>
     /// <param name="port"></param>
     /// <param name="path">default "/"</param>
-    public SignupWebClient(string email, string password,ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string signupPath) : base(protocol,requestMethod, hostname, port, signupPath)
+    public SignupWebClient(string username, string email, string password,ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string signupPath) : base(protocol,requestMethod, hostname, port, signupPath)
     {
-        SetData(email,password);
+        SetData(username, email,password);
     }
 
     /// <summary>
     /// Setdata 
     /// </summary>
+    /// <param name="username"></param>
     /// <param name="email"></param>
     /// <param name="password"></param>
-    public void SetData(string email, string password)
+    public void SetData(string username, string email, string password)
     {
-        this.signupRequestData = new SignupRequestData(email, password);
+        this.signupRequestData = new SignupRequestData(username, email, password);
     }
 
     /// <summary>
