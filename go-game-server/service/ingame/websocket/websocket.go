@@ -3,6 +3,7 @@ package websocket
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/websocket"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/ingame/gamedata"
@@ -17,6 +18,14 @@ func NewConnection(w http.ResponseWriter, r *http.Request) {
 		ReadBufferSize:  model.ReadBufferSize,
 		WriteBufferSize: model.WriteBufferSize,
 		//EnableCompression: true,
+		CheckOrigin: func(r *http.Request) bool {
+			if os.Getenv("ALLOW_ORIGIN") == "*" {
+				return true
+			} else {
+				origin := r.Header.Get(("Origin"))
+				return origin == os.Getenv("ALLOW_ORIGIN")
+			}
+		},
 	}
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
