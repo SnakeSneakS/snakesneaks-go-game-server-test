@@ -17,11 +17,10 @@ public partial class GameSceneController : MonoBehaviour
         Debug.Log($"NEW USER: {user_id}");
         try
         {
-            dispatcher.Invoke(() =>
-            {
-                this.ingameManager.NewIngameClient(user_id, enterWorldMethod.ingame_client_data);
-            });
-        }catch(Exception e)
+            //dispatcher.Invoke(() => { this.ingameManager.NewIngameClient(user_id, enterWorldMethod.ingame_client_data); });
+            this.ingameManager.NewIngameClient(user_id, enterWorldMethod.ingame_client_data);
+        }
+        catch(Exception e)
         {
             Debug.LogError(e);
         }

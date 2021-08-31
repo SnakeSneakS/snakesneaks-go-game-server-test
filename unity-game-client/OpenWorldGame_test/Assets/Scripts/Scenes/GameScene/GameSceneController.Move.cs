@@ -37,9 +37,8 @@ public partial class GameSceneController : MonoBehaviour
     private void OnReceiveMove(uint user_id, Gamemodel.MoveMethod moveMethod)
     {
         Debug.Log($"Received Move Method: UserID: {user_id}, position: {moveMethod.to.position}, rotation: {moveMethod.to.rotation}");
-        dispatcher.Invoke(() => {
-            this.ingameManager.IngameClientsInstances[user_id].playerController.MoveTo(moveMethod.to);
-        });
+        //dispatcher.Invoke(() => { this.ingameManager.IngameClientsInstances[user_id].playerController.MoveTo(moveMethod.to); });
+        this.ingameManager.IngameClientsInstances[user_id].playerController.MoveTo(moveMethod.to);
     }
 
 }

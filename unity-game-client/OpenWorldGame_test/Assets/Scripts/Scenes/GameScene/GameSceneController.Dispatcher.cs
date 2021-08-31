@@ -1,7 +1,9 @@
 using UnityEngine;
 
+//GameSceneController.Dispatcher
 public partial class GameSceneController : MonoBehaviour
 {
+    /*
     public Dispatcher dispatcher;
 
     public void StartDispatcher()
@@ -13,4 +15,5 @@ public partial class GameSceneController : MonoBehaviour
     {
         dispatcher.Execute();
     }
+    */
 }

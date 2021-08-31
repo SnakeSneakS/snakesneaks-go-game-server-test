@@ -25,7 +25,7 @@ public partial class GameSceneController : MonoBehaviour
     {
         SetUpUiInteractionEvent();
         SetUpConnectionEvent();
-        StartDispatcher();
+        //StartDispatcher();
 
         //GameMethod 
         StartMoveInterval();
@@ -37,13 +37,13 @@ public partial class GameSceneController : MonoBehaviour
     private void SetUpConnectionEvent()
     {
         //when connection failed
-        this.gameWebSocketClient.ws.OnClose += (sender, e) =>
+        this.gameWebSocketClient.ws.OnClose += (e) =>
         {
             Debug.Log("Connection Failed!");
             OnConnectionOut();
         };
         //when connection failed
-        this.gameWebSocketClient.ws.OnError += (sender, e) =>
+        this.gameWebSocketClient.ws.OnError += (e) =>
         {
             Debug.Log("Connection Error!");
             OnConnectionOut();
@@ -88,7 +88,7 @@ public partial class GameSceneController : MonoBehaviour
 
     private void Update()
     {
-        UpdateDispatcher();
+        //UpdateDispatcher();
     }
 
     private void SetUpUiInteractionEvent()

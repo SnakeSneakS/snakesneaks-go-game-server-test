@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using WebSocketSharp;
+using NativeWebSocket;
 using UnityEngine;
 
 public partial class GameMethodHandler : MonoBehaviour
@@ -29,9 +29,9 @@ public partial class GameMethodHandler : MonoBehaviour
         this.webSocket = webSocket;
         this.isWorking = false;
 
-        this.webSocket.OnMessage += (sender, e) =>
+        this.webSocket.OnMessage += (bytes) =>
         {
-            OnReceive(e.Data);
+            OnReceive(System.Text.Encoding.UTF8.GetString(bytes));
         };
 
         StartCoroutine(SendCoroutine());
@@ -76,9 +76,9 @@ public partial class GameMethodHandler : MonoBehaviour
         this.storedMethods.Clear();
         string data = JsonUtility.ToJson(gr);
         Debug.Log("Send Data: " + data);
-        if (webSocket.IsAlive)
+        if (webSocket.State==WebSocketState.Open)
         {
-            this.webSocket.Send(data);
+            this.webSocket.SendText(data);
         }
         else
         {

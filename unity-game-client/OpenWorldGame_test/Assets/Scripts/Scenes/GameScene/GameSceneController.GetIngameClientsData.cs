@@ -19,10 +19,8 @@ public partial class GameSceneController : MonoBehaviour
                 Debug.Log($"NEW USER: {clientsData.clients[i].info.user_id}");
                 try
                 {
-                    dispatcher.Invoke(() =>
-                    {
-                        this.ingameManager.NewIngameClient(clientsData.clients[i].info.user_id, clientsData.clients[i]);
-                    });
+                    //dispatcher.Invoke(() => { this.ingameManager.NewIngameClient(clientsData.clients[i].info.user_id, clientsData.clients[i]); });
+                    this.ingameManager.NewIngameClient(clientsData.clients[i].info.user_id, clientsData.clients[i]);
                 }
                 catch(System.Exception e)
                 {

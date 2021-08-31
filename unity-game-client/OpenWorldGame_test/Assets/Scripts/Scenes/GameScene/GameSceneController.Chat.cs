@@ -36,7 +36,8 @@ public partial class GameSceneController : MonoBehaviour
             new_text = new_text.Substring(this.chatDisplayText.text.IndexOf("\n") +1 );
             chatTextUnitNum--;
         }
-        dispatcher.Invoke(() => { this.chatDisplayText.text = new_text; });
+        //dispatcher.Invoke(() => {  });
+        this.chatDisplayText.text = new_text;
     }
 
     private string SanitizeRichText(string text)

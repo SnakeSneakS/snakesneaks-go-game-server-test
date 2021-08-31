@@ -1,22 +1,28 @@
 using System;
 using UnityEngine;
-using WebSocketSharp;
 using System.Security.Authentication;
+using NativeWebSocket;
 
 //Client: WebSocketClient 
 public abstract class WebSocketClient: MonoBehaviour  
 {
     [SerializeField] protected Protocol     protocol    = Protocol.ws;
     [SerializeField] protected string       hostname    = "localhost";
-    [SerializeField] protected string       port        = "8000";
+    [SerializeField] protected string       port        = "8080";
     [SerializeField] protected string       path        = "/";
-    [SerializeField] protected bool         isCertAll     = false;
+    //[SerializeField] protected bool         isCertAll     = false;
+    public string uri {
+        get {
+            return $"{protocol.ToString()}://{hostname}:{port}{path}";
+        }
+    }
 
-    protected virtual EventHandler<MessageEventArgs> ReceivedEventHandler { get; set; } 
-    protected virtual EventHandler<CloseEventArgs> ClosedEventHandler { get; set; } 
-    protected virtual EventHandler<ErrorEventArgs> ErrorEventHandler { get; set; } 
+    protected virtual WebSocketMessageEventHandler ReceivedEventHandler { get; set; } 
+    protected virtual WebSocketCloseEventHandler ClosedEventHandler { get; set; } 
+    protected virtual WebSocketErrorEventHandler ErrorEventHandler { get; set; } 
 
     public WebSocket ws;
+
 
     [Serializable]
     public enum Protocol
@@ -41,32 +47,24 @@ public abstract class WebSocketClient: MonoBehaviour
     {
         if (this.ws == null)
         {
-            this.ws = new WebSocket($"{protocol.ToString()}://{hostname}:{port}{path}");
-            Debug.Log(ws.Url);
-            if (this.ws.IsSecure && isCertAll)
-            {
-                ws.SslConfiguration.ServerCertificateValidationCallback = (sender, cert, chain, err) =>
-                {
-                    return true;
-                };
-                ws.SslConfiguration.EnabledSslProtocols = SslProtocols.None | SslProtocols.Ssl2 | SslProtocols.Ssl3 | SslProtocols.Tls | SslProtocols.Default | SslProtocols.Tls11 | SslProtocols.Tls12;
-            }
+            this.ws = new WebSocket(uri);
+            Debug.Log($"uri");
 
             //when received
-            ws.OnMessage += (sender, e) => {
-                Debug.Log($"Received Data: \n{e.Data}");
+            ws.OnMessage += (bytes) => {
+                Debug.Log($"Received Data: \n{System.Text.Encoding.UTF8.GetString(bytes)}");
             };
             ws.OnMessage += ReceivedEventHandler;
 
             //when closed
-            ws.OnClose += (sender, e) =>
+            ws.OnClose += (e) =>
             {
                 Debug.Log($"WebSocket Connection Closed.\n{e}");
             };
             ws.OnClose += ClosedEventHandler;
 
             //when error
-            ws.OnError += (sender, e) =>
+            ws.OnError += (e) =>
             {
                 Debug.LogError($"WebSocket Connection Error.\n{e}");
             };
@@ -74,5 +72,34 @@ public abstract class WebSocketClient: MonoBehaviour
         }
         ws.Connect();
     }
-    
+
+    public void Send(string text)
+    {
+        this.ws.SendText(text);
+    }
+    public void Send(byte[] bytes)
+    {
+        this.ws.Send(bytes);
+    }
+
+    //OnApplicationQuit
+    private async void OnApplicationQuit()
+    {
+        if (this.ws != null)
+        {
+            await ws.Close();
+        }   
+    }
+
+    //Update
+    public void Update()
+    {
+#if !UNITY_WEBGL || UNITY_EDITOR
+        if (this.ws != null)
+        {
+            ws.DispatchMessageQueue();
+        }
+#endif
+    }
+
 }

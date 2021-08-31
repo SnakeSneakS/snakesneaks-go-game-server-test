@@ -1,6 +1,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+using NativeWebSocket;
 
 //WebSocketTestScene.Controller 
 [RequireComponent(typeof(GameWebSocketClient))]
@@ -37,7 +38,7 @@ public class WebSocketTestScene : MonoBehaviour
         //Send
         SendButton.onClick.AddListener(() =>
         {
-            if (!m_wsclient.ws.IsAlive)
+            if (!(m_wsclient.ws.State==WebSocketState.Open))
             {
                 Debug.LogAssertion("WebSocket Connection Not Alive");
                 return;
@@ -51,7 +52,7 @@ public class WebSocketTestScene : MonoBehaviour
     private void Connect()
     {
         this.m_wsclient.Connect();
-        if (this.m_wsclient.ws.IsAlive == true)
+        if (!(this.m_wsclient.ws.State == WebSocketState.Open))
         {
             this.gameMethodHandler.StartHandler(m_wsclient.ws, new Model.Session { });
         }
@@ -59,6 +60,6 @@ public class WebSocketTestScene : MonoBehaviour
 
     private void FixedUpdate()
     {
-        WebSocketStateText.text = $"WebSocketState: \nurl: {m_wsclient.ws.Url}, alive: {m_wsclient.ws.IsAlive}";
+        WebSocketStateText.text = $"WebSocketState: \nurl: {m_wsclient.uri}, alive: {m_wsclient.ws.State==WebSocketState.Open}";
     }
 }

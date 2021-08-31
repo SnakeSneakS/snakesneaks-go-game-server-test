@@ -24,11 +24,10 @@ func LoadENV(path string) {
 
 //RunServer up server
 func RunServer() {
-	if os.Getenv("DEBUG_MODE") == "True" {
-		color.Blue("This is DEBUG MODE")
-	} else {
-		color.Blue("This is \"not\" DEBUG MODE")
-	}
+	color.Green(fmt.Sprintf("DEBUG_MODE: %t", os.Getenv("DEBUG_MODE") == "True"))
+	color.Green(fmt.Sprintf("USE_TLS: %t", os.Getenv("USE_TLS") == "True"))
+	color.Green(fmt.Sprintf("CREATE_ACCOUNT: %t", os.Getenv("CREATE_ACCOUNT") == "True"))
+	color.Green(fmt.Sprintf("ALLOW_ORIGIN: %s", os.Getenv("ALLOW_ORIGIN")))
 
 	// create handle
 	h, err := handler.NewHandler()

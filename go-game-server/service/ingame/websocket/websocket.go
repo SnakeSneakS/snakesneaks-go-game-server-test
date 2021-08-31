@@ -20,6 +20,7 @@ func NewConnection(w http.ResponseWriter, r *http.Request) {
 		//EnableCompression: true,
 		CheckOrigin: func(r *http.Request) bool {
 			if os.Getenv("ALLOW_ORIGIN") == "*" {
+				//log.Println("ALLOW ALL ORIGIN")
 				return true
 			} else {
 				origin := r.Header.Get(("Origin"))
