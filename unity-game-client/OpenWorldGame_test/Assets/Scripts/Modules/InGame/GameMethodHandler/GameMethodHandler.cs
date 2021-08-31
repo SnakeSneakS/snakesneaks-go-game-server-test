@@ -112,6 +112,7 @@ public partial class GameMethodHandler : MonoBehaviour
                             ReceiveChat(user_id,method.content);
                             break;
                         case Gamemodel.GameMethodType.Move:
+                            ReceiveMove(user_id, method.content);
                             break;
                         case Gamemodel.GameMethodType.GetIngameClientsData:
                             ReceiveGetIngameClientsData(user_id, method.content);

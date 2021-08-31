@@ -37,7 +37,10 @@ func HandleMessage(messageType int, message []byte, conn *websocket.Conn) {
 				gamemethod.HandleChatReceivedData(conn, method.Content)
 				break
 			case ingamemodel.EnterWorld:
-				gamemethod.HandleEnterWorldReceivedData(req.Session.UserID, method.Content, conn)
+				gamemethod.HandleEnterWorldReceivedData(req.Session.UserID, conn, method.Content)
+				break
+			case ingamemodel.Move:
+				gamemethod.HandleMoveReceivedData(conn, method.Content)
 				break
 			default:
 				break

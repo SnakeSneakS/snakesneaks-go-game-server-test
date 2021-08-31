@@ -27,6 +27,9 @@ public partial class GameSceneController : MonoBehaviour
         SetUpConnectionEvent();
         StartDispatcher();
 
+        //GameMethod 
+        StartMoveInterval();
+
         //Send Enterworld Message to Server 
         this.gameMethodHandler.SendEnterWorld();
     }
@@ -69,6 +72,12 @@ public partial class GameSceneController : MonoBehaviour
             Debug.Log($"Ingame GetIngameClientsInfo Received: \nuser_id: {e.user_id}");
             OnReceivedGetIngameClientsInfo(e.user_id, e.getIngameClientsData);
         };
+        //receive move
+        this.gameMethodHandler.OnMoveReceive += (e) =>
+        {
+            Debug.Log($"Ingame Move Received: \nuser_id: {e.user_id}");
+            OnReceiveMove(e.user_id, e.moveMethod);
+        };
         //Session Failed event
         this.gameMethodHandler.OnSessionFailed += (sender,e) =>
         {
@@ -91,7 +100,6 @@ public partial class GameSceneController : MonoBehaviour
         });*/
         chatInputField.onEndEdit.AddListener((string text) => { SendChat(); });
     }
-
 
     public void Quit()
     {

@@ -43,7 +43,7 @@ public partial class Gamemodel
     [Serializable]
     public struct IngameClientInstance
     {
-        [SerializeField] public GameObject player; //動くプレイヤー
+        [SerializeField] public GameObject playerPrefab; //動くプレイヤー
         [SerializeField] public PlayerController playerController; //プレイヤーを動かすコントローラ
     }
 }

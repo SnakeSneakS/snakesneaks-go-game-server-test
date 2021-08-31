@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/auth"
+	auth "github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/auth"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/debug"
 	"github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/handler/api/game"
+	cors "github.com/snakesneaks/snakesneaks-go-game-server-test/go-game-server/service/auth"
 
 	"github.com/gorilla/mux"
 )
@@ -34,5 +35,6 @@ func NewHandler() *Handler {
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	cors.AllowCORS(w)
 	h.r.ServeHTTP(w, r)
 }

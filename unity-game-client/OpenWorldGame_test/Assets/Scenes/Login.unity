@@ -285,13 +285,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 214251861}
   m_TextComponent: {fileID: 572325272}
   m_Placeholder: {fileID: 1795341062}
-  m_ContentType: 5
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 6
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
@@ -734,9 +734,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 997514e8c19ab4267a76f5cf79815ecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  protocol: 1
+  protocol: 0
   hostname: localhost
-  port: 50000
+  port: 8080
   path: /api/auth/login
   httpRequestMethod: 1
   certAllowAll: 1
@@ -755,9 +755,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2330303ae471645dc85e8e5b0c26022d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  protocol: 1
+  protocol: 0
   hostname: localhost
-  port: 50000
+  port: 8080
   path: /api/auth/signup
   httpRequestMethod: 1
   certAllowAll: 1

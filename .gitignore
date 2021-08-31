@@ -7,3 +7,7 @@ memo.md
 # mysqlの中身データを除外
 /db-mysql/mysql/*
 !/db-mysql/mysql/my.conf
+
+#Build
+unity-game-client/Build/
+

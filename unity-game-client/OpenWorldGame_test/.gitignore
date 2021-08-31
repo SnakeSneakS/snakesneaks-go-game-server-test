@@ -1,7 +1,4 @@
 
-
-
-
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
@@ -73,3 +70,13 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+
+
+# Asset Store 
+/[Aa]ssets/Joystick Pack
+/[Aa]ssets/Joystick Pack.meta 
+/[Aa]ssets/TextMesh Pro
+/[Aa]ssets/TextMesh Pro.meta
+/[Aa]ssets/ADG_Textures
+/[Aa]ssets/ADG_Textures.meta 

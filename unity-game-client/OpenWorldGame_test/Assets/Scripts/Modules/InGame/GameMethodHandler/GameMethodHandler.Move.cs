@@ -21,7 +21,20 @@ public partial class GameMethodHandler
     {
         Gamemodel.MoveMethod moveMethod = new Gamemodel.MoveMethod { to=new Gamemodel.GameTransform(transform) };
         string content = JsonUtility.ToJson(moveMethod);
-        Gamemodel.GameMethod gameMethod = new Gamemodel.GameMethod { method = Gamemodel.GameMethodType.Chat, content = content };
+        Gamemodel.GameMethod gameMethod = new Gamemodel.GameMethod { method = Gamemodel.GameMethodType.Move, content = content };
+        Add(gameMethod);
+    }
+
+    /// <summary>
+    /// Send Move Message To Server 
+    /// </summary>
+    /// <param name="fromPosition">now position</param>
+    /// <param name="toPosition">to position</param>
+    public void SendMove(Vector3 fromPosition, Vector3 toPosition)
+    {
+        Gamemodel.MoveMethod moveMethod = new Gamemodel.MoveMethod { to = new Gamemodel.GameTransform() { position=toPosition, rotation=GameMath.Vector3toQuaternion(toPosition-fromPosition).eulerAngles, } };
+        string content = JsonUtility.ToJson(moveMethod);
+        Gamemodel.GameMethod gameMethod = new Gamemodel.GameMethod { method = Gamemodel.GameMethodType.Move, content = content };
         Add(gameMethod);
     }
 

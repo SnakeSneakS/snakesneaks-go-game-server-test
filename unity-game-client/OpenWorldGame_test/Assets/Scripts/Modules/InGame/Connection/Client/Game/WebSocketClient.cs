@@ -43,7 +43,7 @@ public abstract class WebSocketClient: MonoBehaviour
         {
             this.ws = new WebSocket($"{protocol.ToString()}://{hostname}:{port}{path}");
             Debug.Log(ws.Url);
-            if (isCertAll)
+            if (this.ws.IsSecure && isCertAll)
             {
                 ws.SslConfiguration.ServerCertificateValidationCallback = (sender, cert, chain, err) =>
                 {
