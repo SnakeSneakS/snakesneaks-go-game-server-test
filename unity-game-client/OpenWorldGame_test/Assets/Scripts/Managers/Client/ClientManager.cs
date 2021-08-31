@@ -67,4 +67,14 @@ public class ClientManager : MonoBehaviour
         Username = username;
         SaveUsername();
     }
+
+    //Delete
+    public static void DeleteLocalData()
+    {
+        Session.UserID = 0;
+        Session.SessionID = null;
+        PlayerPrefs.DeleteKey(PlayerPrefsSystemDefine.CLIENT_USER_ID);
+        PlayerPrefs.DeleteKey(PlayerPrefsSystemDefine.CLIENT_SESSION_ID);
+        PlayerPrefs.DeleteKey(PlayerPrefsSystemDefine.CLIENT_USERNAME);
+    }
 }

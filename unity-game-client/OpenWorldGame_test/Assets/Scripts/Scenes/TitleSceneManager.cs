@@ -30,6 +30,14 @@ public class TitleSceneManager : MonoBehaviour
         ClientManager.LoadLocalData();
     }
 
+    private void Start()
+    {
+        if (!string.IsNullOrEmpty(ClientManager.Session.SessionID))
+        {
+            this.Logout_RequestButton.gameObject.SetActive(true);
+        }
+    }
+
     /// <summary>
     /// Set up button event: Onclick
     /// </summary>
@@ -166,6 +174,7 @@ public class TitleSceneManager : MonoBehaviour
     public void LogoutSuccess()
     {
         Debug.Log("Logout Success!");
+        ClientManager.DeleteLocalData();
         SceneManager.LoadScene(SceneManager.SceneName.Title);
     }
 
