@@ -1757,7 +1757,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1182305534}
   m_HandleRect: {fileID: 1182305533}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2318,6 +2318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chatInputField: {fileID: 58474676}
+  chatOutputVerticalScrollRect: {fileID: 1368808212}
   chatDisplayText: {fileID: 1878243782}
   chatSendButton: {fileID: 949507019}
   moveIntervalSeconds: 0.5

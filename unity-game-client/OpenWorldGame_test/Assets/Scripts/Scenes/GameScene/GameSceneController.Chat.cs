@@ -9,6 +9,7 @@ public partial class GameSceneController : MonoBehaviour
 {
     [Header("Chat")]
     [SerializeField] InputField chatInputField;
+    [SerializeField] ScrollRect chatOutputVerticalScrollRect;
     [SerializeField] TextMeshProUGUI chatDisplayText;
     [SerializeField] Button chatSendButton;
 
@@ -26,6 +27,8 @@ public partial class GameSceneController : MonoBehaviour
 
     public void OnReceiveChat(uint user_id, Gamemodel.ChatMethod chatMethod)
     {
+        bool isChatScrollBottom = (this.chatOutputVerticalScrollRect.verticalNormalizedPosition<=0);
+
         string name = user_id.ToString();
         try { name = this.ingameManager.IngameClientsData[user_id].info.username; }
         catch { Debug.LogError($"Failed to find gameClientData[{user_id}]!"); }
@@ -38,6 +41,10 @@ public partial class GameSceneController : MonoBehaviour
         }
         //dispatcher.Invoke(() => {  });
         this.chatDisplayText.text = new_text;
+
+        Canvas.ForceUpdateCanvases();
+         this.chatOutputVerticalScrollRect.verticalNormalizedPosition = 0;
+        Canvas.ForceUpdateCanvases();
     }
 
     private string SanitizeRichText(string text)
