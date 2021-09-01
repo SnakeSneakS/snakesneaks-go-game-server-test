@@ -17,7 +17,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("If next distination is far than this value, not move but teleport")]
     [SerializeField] float checkMoveMaxDistance = 7.0f; //if distance is larger than this, player don't move but do teleportation.
     [Tooltip("the time required to move to next destination.")]
-    [SerializeField] float moveSpeedTime = 1.0f; //次のポイントへの移動に何秒かかるか 
+    [SerializeField] float moveSpeedTime = 1.0f; //次のポイントへの移動に何秒かかるか
+    [Tooltip("the ratio how fast player turn to next destination")][Range(0,1)]
+    [SerializeField] float turnSpeedRatio = 0.5f; //どれくらい早く移動方向を向くか
     [SerializeField] float magnitudeToVelocityRatio = 4.0f;
 
     [Header("Camera")]
@@ -81,7 +83,7 @@ public class PlayerController : MonoBehaviour
             //MoveControll
              CheckAndReach();
             this.transform.position += Time.deltaTime * toVelocity;
-            this.transform.rotation = Quaternion.LookRotation(toVelocity);
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(toVelocity), turnSpeedRatio);
         }
 
         //NameControll
