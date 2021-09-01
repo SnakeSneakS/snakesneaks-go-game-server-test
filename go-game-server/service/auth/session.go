@@ -17,7 +17,7 @@ var SessionData map[uint32]SessionInf
 
 const (
 	sessionIDsize        = 32
-	sessionExpireSeconds = 604800 //604800[s]=1[week], int64
+	sessionExpireSeconds = 3600 //3600[s]=1[hour] //604800 //604800[s]=1[week], int64
 
 	sessionManegementRoutineSeconds = time.Second * 60
 )

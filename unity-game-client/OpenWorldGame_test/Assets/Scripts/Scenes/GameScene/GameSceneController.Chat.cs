@@ -10,8 +10,10 @@ public partial class GameSceneController : MonoBehaviour
     [Header("Chat")]
     [SerializeField] InputField chatInputField;
     [SerializeField] ScrollRect chatOutputVerticalScrollRect;
-    [SerializeField] TextMeshProUGUI chatDisplayText;
     [SerializeField] Button chatSendButton;
+    [Header("ChatDisplay")]
+    [SerializeField] GameObject chatDisplayTextUnitParent;
+    [SerializeField] ChatDisplayTextUnitController chatDisplayTextUnitController;
 
     private const int chatTextLengthMaxPerUnit = 60;
 
@@ -32,18 +34,19 @@ public partial class GameSceneController : MonoBehaviour
         string name = user_id.ToString();
         try { name = this.ingameManager.IngameClientsData[user_id].info.username; }
         catch { Debug.LogError($"Failed to find gameClientData[{user_id}]!"); }
-        string new_text = this.chatDisplayText.text + SanitizeRichText($"{name}:\u00A0{chatMethod.text}\n");
+        string content = chatMethod.text;
+        GameObject chatDisplayTextUnit = chatDisplayTextUnitController.Create(SanitizeRichText(name), SanitizeRichText(content));
+        chatDisplayTextUnit.transform.SetParent(chatDisplayTextUnitParent.transform,false);
         chatTextUnitNum++;
         if (chatTextUnitNum > chatTextUnitMax)
         {
-            new_text = new_text.Substring(this.chatDisplayText.text.IndexOf("\n") +1 );
+            chatDisplayTextUnitParent.GetComponentInChildren<ChatDisplayTextUnitController>().Delete();
             chatTextUnitNum--;
         }
         //dispatcher.Invoke(() => {  });
-        this.chatDisplayText.text = new_text;
 
         Canvas.ForceUpdateCanvases();
-         this.chatOutputVerticalScrollRect.verticalNormalizedPosition = 0;
+        if(isChatScrollBottom) this.chatOutputVerticalScrollRect.verticalNormalizedPosition = 0;
         Canvas.ForceUpdateCanvases();
     }
 

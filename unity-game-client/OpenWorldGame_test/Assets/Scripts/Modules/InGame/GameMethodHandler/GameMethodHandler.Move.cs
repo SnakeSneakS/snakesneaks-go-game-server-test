@@ -32,7 +32,7 @@ public partial class GameMethodHandler
     /// <param name="toPosition">to position</param>
     public void SendMove(Vector3 fromPosition, Vector3 toPosition)
     {
-        Gamemodel.MoveMethod moveMethod = new Gamemodel.MoveMethod { to = new Gamemodel.GameTransform() { position=toPosition, rotation=GameMath.Vector3toQuaternion(toPosition-fromPosition).eulerAngles, } };
+        Gamemodel.MoveMethod moveMethod = new Gamemodel.MoveMethod { to = new Gamemodel.GameTransform() { position=toPosition, rotation=Quaternion.LookRotation(toPosition-fromPosition).eulerAngles, } };
         string content = JsonUtility.ToJson(moveMethod);
         Gamemodel.GameMethod gameMethod = new Gamemodel.GameMethod { method = Gamemodel.GameMethodType.Move, content = content };
         Add(gameMethod);

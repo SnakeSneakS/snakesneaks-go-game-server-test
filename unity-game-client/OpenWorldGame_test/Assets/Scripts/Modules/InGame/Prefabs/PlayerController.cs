@@ -11,10 +11,14 @@ public class PlayerController : MonoBehaviour
 
     [Header("Move State")]
     bool isMoving = false;
-    float checkReachDistance = 0.1f;
-    float checkMoveMaxDistance = 5.0f; //if distance is larger than this, player don't move but do teleportation. 
-    float moveSpeedTime = 1.0f; //次のポイントへの移動に何秒かかるか 
-    float magnitudeToVelocityRatio = 2.0f;
+    [SerializeField] float checkReachDistance = 0.5f;
+    [SerializeField] float checkMoveMaxDistance = 7.0f; //if distance is larger than this, player don't move but do teleportation. 
+    [SerializeField] float moveSpeedTime = 1.0f; //次のポイントへの移動に何秒かかるか 
+    [SerializeField] float magnitudeToVelocityRatio = 4.0f;
+
+    [Header("Camera")]
+    
+    [SerializeField] MainCameraController mainCameraController; //カメラの向きから、次に進む方向を決める。 
 
     Vector3 toPosition;
     Vector3 toVelocity;
@@ -27,7 +31,17 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 NextPositionFromVector2(Vector2 vec2)
     {
-        return this.gameObject.transform.position + magnitudeToVelocityRatio * new Vector3(vec2.x,0,vec2.y);
+        Vector3 nextPos;
+        if (isMyPlayer)
+        {
+            nextPos = this.gameObject.transform.position + magnitudeToVelocityRatio * (mainCameraController.rotationH * new Vector3(vec2.x, 0, vec2.y));
+
+        }
+        else
+        {
+            nextPos = this.gameObject.transform.position + magnitudeToVelocityRatio * new Vector3(vec2.x, 0, vec2.y);
+        }
+        return nextPos;
     }
 
     public void MoveTo(Gamemodel.GameTransform to)
@@ -76,7 +90,7 @@ public class PlayerController : MonoBehaviour
                     CheckAndReach();
                 }
                 this.transform.position += Time.deltaTime * toVelocity;
-                this.transform.rotation = GameMath.Vector3toQuaternion(toVelocity);
+                this.transform.rotation = Quaternion.LookRotation(toVelocity);
             }
 #if false
         }    
