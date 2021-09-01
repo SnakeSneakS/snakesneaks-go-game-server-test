@@ -8,11 +8,15 @@ public class PlayerController : MonoBehaviour
     [Header("Player")]
     [SerializeField] bool isMyPlayer = false;
     [SerializeField] TextMeshProUGUI usernameTmp;
+    [SerializeField] GameObject usernameUI;
 
     [Header("Move State")]
     bool isMoving = false;
+    [Tooltip("If next distination is near than this value, judge as \"Reached\"")]
     [SerializeField] float checkReachDistance = 0.5f;
-    [SerializeField] float checkMoveMaxDistance = 7.0f; //if distance is larger than this, player don't move but do teleportation. 
+    [Tooltip("If next distination is far than this value, not move but teleport")]
+    [SerializeField] float checkMoveMaxDistance = 7.0f; //if distance is larger than this, player don't move but do teleportation.
+    [Tooltip("the time required to move to next destination.")]
     [SerializeField] float moveSpeedTime = 1.0f; //次のポイントへの移動に何秒かかるか 
     [SerializeField] float magnitudeToVelocityRatio = 4.0f;
 
@@ -52,48 +56,35 @@ public class PlayerController : MonoBehaviour
 
         Vector3 DiffPos = to.position - this.gameObject.transform.position;
 
-        if ( DiffPos.magnitude > checkMoveMaxDistance)
-        {
-            isMoving = false;
-            CheckAndReach();
-        }
-        else
-        {
-            isMoving = true;
-            toVelocity = DiffPos / moveSpeedTime;
-        }
+        isMoving = true;
+        toVelocity = DiffPos / moveSpeedTime;
 
         Debug.Log($"Move to: ({toPosition.x},{toPosition.y},{toPosition.z})");
     }
 
     private void CheckAndReach()
     {
-        isMoving = false;
-        this.gameObject.transform.position = toPosition;
-        this.gameObject.transform.rotation = Quaternion.Euler(toRotation);
+        Vector3 DiffPos = this.transform.position - toPosition;
+        if ( (DiffPos.magnitude < checkReachDistance) || (DiffPos.magnitude > checkMoveMaxDistance) )
+        {
+            isMoving = false;
+            this.gameObject.transform.position = toPosition;
+            this.gameObject.transform.rotation = Quaternion.Euler(toRotation);
+        }
     }
 
     private void Update()
     {
-#if false
-        if (isMyPlayer)
+        
+        if (isMoving)
         {
-
+            //MoveControll
+             CheckAndReach();
+            this.transform.position += Time.deltaTime * toVelocity;
+            this.transform.rotation = Quaternion.LookRotation(toVelocity);
         }
-        else
-        {
-#endif
-            if (isMoving)
-            {
-                if ((this.transform.position - toPosition).magnitude < checkReachDistance)
-                {
-                    CheckAndReach();
-                }
-                this.transform.position += Time.deltaTime * toVelocity;
-                this.transform.rotation = Quaternion.LookRotation(toVelocity);
-            }
-#if false
-        }    
-#endif
+
+        //NameControll
+        this.usernameUI.transform.rotation = Quaternion.LookRotation((this.usernameUI.transform.position - mainCameraController.gameObject.transform.position));
     }
 }

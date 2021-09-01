@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9002023278197818608}
   - component: {fileID: 9002023278197818610}
   m_Layer: 5
-  m_Name: BG
+  m_Name: UsernameUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -200,7 +200,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc4513e24c2a8446baeed4dc1295e86e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMyPlayer: 0
   usernameTmp: {fileID: 9002023280011635680}
+  usernameUI: {fileID: 9002023278197818606}
+  checkReachDistance: 0.5
+  checkMoveMaxDistance: 7
+  moveSpeedTime: 1
+  magnitudeToVelocityRatio: 4
+  mainCameraController: {fileID: 0}
 --- !u!1 &9002023279655973335
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,7 +320,7 @@ GameObject:
   - component: {fileID: 9002023280011635681}
   - component: {fileID: 9002023280011635680}
   m_Layer: 5
-  m_Name: Text
+  m_Name: UsernameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

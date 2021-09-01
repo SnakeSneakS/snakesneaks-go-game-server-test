@@ -11,15 +11,17 @@ public class MainCameraController : MonoBehaviour
     public Quaternion rotationV { get; private set; } //vertical 
     public Quaternion rotationH { get; private set; } //horizontal
     public Quaternion rotation { get { return rotationH * rotationV; } }
-    float m_distance; //distance
-
+    private float m_distance; //distance
+    private float rectPosY; //camera's position of Y 
 
     void Start()
     {
         Vector3 diff = this.gameObject.transform.position - cameraTarget.position;
         this.m_distance = diff.magnitude;
-        this.rotationH = Quaternion.identity;
-        this.rotationV = Quaternion.Euler(this.gameObject.transform.rotation.x, 0, this.gameObject.transform.rotation.z);
+        Debug.Log("distance: "+this.m_distance);
+        this.rotationH = Quaternion.Euler(0, this.gameObject.transform.eulerAngles.y, this.gameObject.transform.eulerAngles.z);
+        this.rotationV = Quaternion.Euler(this.gameObject.transform.eulerAngles.x, 0, 0);
+        this.rectPosY = (diff + (this.gameObject.transform.rotation * (Vector3.forward * m_distance))).y;
     }
 
     private void Update()
@@ -27,7 +29,9 @@ public class MainCameraController : MonoBehaviour
         //rotate camera from joystick input
         if(cameraRotationJoystick.Horizontal!=0 || cameraRotationJoystick.Vertical != 0)
         {
-            Rotate(cameraRotationJoystick.Horizontal * Time.deltaTime, -cameraRotationJoystick.Vertical * Time.deltaTime);
+            RotateByNormalizedArguments(cameraRotationJoystick.Horizontal * Time.deltaTime, -cameraRotationJoystick.Vertical * Time.deltaTime);
+            Debug.Log("position: " + this.gameObject.transform.position);
+            Debug.Log("rotation: " + this.gameObject.transform.rotation);
         }
 
     }
@@ -35,13 +39,20 @@ public class MainCameraController : MonoBehaviour
     private void LateUpdate()
     {
         //keep camera position
-        this.gameObject.transform.position = cameraTarget.position - transform.rotation * Vector3.forward * m_distance;
-        this.gameObject.transform.rotation = rotationH * rotationV;
+        this.gameObject.transform.rotation = rotation;
+        this.gameObject.transform.position = Vector3.up * rectPosY + cameraTarget.position - ( this.gameObject.transform.rotation * (Vector3.forward * m_distance));
     }
 
-    private void Rotate(float rotH, float rotV)
+    private void RotateByNormalizedArguments(float rotH, float rotV)
     {
         rotationH *= Quaternion.Euler(0, rotH * cameraRotationSpeed, 0);
-        rotationV *= Quaternion.Euler(rotV * cameraRotationSpeed, 0, 0);
+        Quaternion new_rotationV = rotationV * Quaternion.Euler(rotV * cameraRotationSpeed, 0, 0);
+        
+        Debug.Log(rotationV.eulerAngles);
+        if (new_rotationV.eulerAngles.x < 90 && new_rotationV.eulerAngles.y==0)
+        {
+            rotationV = new_rotationV;
+        }
+        
     }
 }
