@@ -107,7 +107,11 @@ public class SignupWebClient : WebClient
     protected override bool CheckRequestData()
     {
         bool ok = true;
-        if (this.signupRequestData.email.Length > Model.EMAIL_LENGTH_MAX || this.signupRequestData.email.Length< Model.EMAIL_LENGTH_MIN)
+        if(this.signupRequestData.username.Length > Model.USERNAME_LENGTH_MAX || this.signupRequestData.username.Length < Model.USERNAME_LENGTH_MIN)
+        {
+            ok = false;
+            this.message = $"不適切なユーザネームです!\n{Model.USERNAME_LENGTH_MIN}文字〜{Model.USERNAME_LENGTH_MAX}文字で入力してください。";
+        }else if (this.signupRequestData.email.Length > Model.EMAIL_LENGTH_MAX || this.signupRequestData.email.Length< Model.EMAIL_LENGTH_MIN)
         {
             ok = false;
             this.message = $"不適切なメールアドレスです!\n{Model.EMAIL_LENGTH_MIN}文字〜{Model.EMAIL_LENGTH_MAX}文字で入力してください。";

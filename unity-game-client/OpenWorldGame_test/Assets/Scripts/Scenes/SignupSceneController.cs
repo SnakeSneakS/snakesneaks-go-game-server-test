@@ -3,24 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(LoginWebClient))]
-[RequireComponent(typeof(SignupWebClient))]
-public class LoginSceneController : MonoBehaviour
+public class SignupSceneController : MonoBehaviour
 {
     [Header("Form")]
+    [SerializeField] InputField UsernameInputField;
     [SerializeField] InputField EmailInputField;
     [SerializeField] InputField PasswordInputField;
-    [SerializeField] Button     Login_RequestButton;
-    [SerializeField] Button     Signup_SceneLoadButton;
+    [SerializeField] Button Signup_RequestButton;
+    [SerializeField] Button Login_SceneLoadButton;
 
     [Header("Result")]
     [SerializeField] GameObject ResultPanel;
-    [SerializeField] Text       ResultText;
+    [SerializeField] Text ResultText;
 
     [Header("WebClient")]
-    [SerializeField] private LoginWebClient loginWebClient;
+    [SerializeField] private SignupWebClient signupWebClient;
 
-    private bool isLoginChallenge = false;
+    private bool isSignupChallenge = false;
 
     private void Awake()
     {
@@ -33,59 +32,61 @@ public class LoginSceneController : MonoBehaviour
     /// </summary>
     private void SetUpButtonEvent()
     {
-        //Login
-        Login_RequestButton.onClick.AddListener(() => {
-            if (!isLoginChallenge)
+        //Signup
+        Signup_RequestButton.onClick.AddListener(() => {
+            if (!isSignupChallenge)
             {
-                StartCoroutine(LoginRequest());
+                StartCoroutine(SignupRequest());
             }
         });
-        //Signup
-        Signup_SceneLoadButton.onClick.AddListener(() =>
+        //Login
+        Login_SceneLoadButton.onClick.AddListener(() =>
         {
-            if (!isLoginChallenge)
+            if (!isSignupChallenge)
             {
-                SceneManager.LoadScene(SceneManager.SceneName.Signup);
+                SceneManager.LoadScene(SceneManager.SceneName.Login);
             }
         });
     }
 
 
     /// <summary>
-    /// Login Request
+    /// Signup Request
     /// </summary>
     /// <returns></returns>
-    IEnumerator LoginRequest()
+    IEnumerator SignupRequest()
     {
-        isLoginChallenge = true;
+        isSignupChallenge = true;
 
+        string username = UsernameInputField.text;
         string email = EmailInputField.text;
         string password = PasswordInputField.text;
-        loginWebClient.SetData(email, password);
-        yield return StartCoroutine(loginWebClient.Send());
+        ClientManager.UpdateUsername(username);
+        signupWebClient.SetData(username, email, password);
+        yield return StartCoroutine(signupWebClient.Send());
 
         //処理
-        if (loginWebClient.result == WebClient.ResultType.Success)
+        if (signupWebClient.result == WebClient.ResultType.Success)
         {
             //成功した時
             //LoginWebClientはひとまずLoginResponseDataをdataに保存するとする 
-            LoginWebClient.LoginResponseData lrd = (LoginWebClient.LoginResponseData)loginWebClient.data;
-            Debug.Log($"ParsedResponseData: \nStatus: {lrd.status}, user_id: {lrd.session.UserID}, session_id: {lrd.session.SessionID}");
-            if (lrd.status == Model.ConnStatus.success)
+            SignupWebClient.SignupResponseData srd = (SignupWebClient.SignupResponseData)signupWebClient.data;
+            Debug.Log($"ParsedResponseData: \nStatus: {srd.status}, user_id: {srd.session.UserID}, session_id: {srd.session.SessionID}");
+            if (srd.status == Model.ConnStatus.success)
             {
-                LoginSucces(lrd.session);
+                SignupSucces(srd.session);
             }
             else
             {
-                LoginFailed();
+                SignupFailed();
             }
         }
         else
         {
-            switch (loginWebClient.result)
+            switch (signupWebClient.result)
             {
                 case LoginWebClient.ResultType.RequestDataError:
-                    RequestDataError(loginWebClient);
+                    RequestDataError(signupWebClient);
                     break;
                 case LoginWebClient.ResultType.ResponseDataError:
                 case LoginWebClient.ResultType.ConnectionError:
@@ -93,25 +94,28 @@ public class LoginSceneController : MonoBehaviour
                     ConnError();
                     break;
             }
-            
+
         }
-        isLoginChallenge = false;
+        isSignupChallenge = false;
     }
 
 
-    public void LoginSucces(Model.Session session)
+    public void SignupSucces(Model.Session session)
     {
-        ResultText.text = "ログインに成功しました。";
+        ResultText.text = "登録に成功しました。";
         StartCoroutine(ShowAlertForWhile(ResultPanel, 2.0f));
         ClientManager.UpdateSession(session);
         StartCoroutine(LoadScene());
     }
 
-    public void LoginFailed()
+    public void SignupFailed()
     {
-        ResultText.text = "ログインに失敗しました。";
-        StartCoroutine(ShowAlertForWhile(ResultPanel,2.0f));
+        ResultText.text = "登録に失敗しました。";
+        StartCoroutine(ShowAlertForWhile(ResultPanel, 2.0f));
     }
+
+    
+
 
     public void ConnError()
     {

@@ -8,7 +8,8 @@ public class SceneManager : MonoBehaviour
     public enum SceneName
     {
         Title,
-        Login, //login and signup
+        Login,
+        Signup,
         UserInfo,
         LoadGame,
         Game,

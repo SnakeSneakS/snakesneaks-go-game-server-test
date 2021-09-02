@@ -12,14 +12,17 @@ EditorBuildSettings:
     path: Assets/Scenes/Title.unity
     guid: 9f3cb8c20bd4f4c9f88573cafa36232d
   - enabled: 1
-    path: Assets/Scenes/Game.unity
-    guid: a6c7ca6a0968d45f7a580eb9dd82af46
+    path: Assets/Scenes/Signup.unity
+    guid: 31fb05f081d6d407289d099bced7d0b5
+  - enabled: 1
+    path: Assets/Scenes/Login.unity
+    guid: 297fd9ab726804addaa753a1c61293ac
   - enabled: 1
     path: Assets/Scenes/LoadGame.unity
     guid: 33840f012822e45248af1fef0685dfeb
   - enabled: 1
-    path: Assets/Scenes/Login.unity
-    guid: 297fd9ab726804addaa753a1c61293ac
+    path: Assets/Scenes/Game.unity
+    guid: a6c7ca6a0968d45f7a580eb9dd82af46
   - enabled: 1
     path: Assets/Scenes/UserInfo.unity
     guid: 529ea3af705c645e68253d41b5eba8ce
