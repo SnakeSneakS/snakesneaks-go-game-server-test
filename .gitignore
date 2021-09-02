@@ -1,5 +1,6 @@
 # secret 
 .env
+!example.env
 
 # ignore memo 
 memo.md

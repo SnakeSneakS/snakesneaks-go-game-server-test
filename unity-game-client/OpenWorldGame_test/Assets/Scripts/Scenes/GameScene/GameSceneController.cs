@@ -4,12 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 //GameSceneController.Base 
-[RequireComponent(typeof(GameWebSocketClient))]
 [RequireComponent(typeof(GameMethodHandler))]
 public partial class GameSceneController : MonoBehaviour
 {
     [Header("Module")]
-    [SerializeField] GameWebSocketClient gameWebSocketClient;
+    GameWebSocketClient gameWebSocketClient;
     [SerializeField] GameMethodHandler gameMethodHandler;
     [SerializeField] IngameManager ingameManager;
 
@@ -17,6 +16,14 @@ public partial class GameSceneController : MonoBehaviour
 
     private void Awake()
     {
+        if (EnvManager.Read("USE_TLS") == "True")
+        {
+            this.gameWebSocketClient = new GameWebSocketClient(WebSocketClient.Protocol.wss, EnvManager.Read("HOST_NAME"), EnvManager.Read("GO_GAME_SERVER_PORT_TLS"), "/api/game/websocket");
+        }
+        else
+        {
+            this.gameWebSocketClient = new GameWebSocketClient(WebSocketClient.Protocol.ws, EnvManager.Read("HOST_NAME"), EnvManager.Read("GO_GAME_SERVER_PORT"), "/api/game/websocket");
+        }
         this.gameWebSocketClient.Connect();
         this.gameMethodHandler.StartHandler(this.gameWebSocketClient.ws, ClientManager.Session);
     }
@@ -89,6 +96,7 @@ public partial class GameSceneController : MonoBehaviour
     private void Update()
     {
         //UpdateDispatcher();
+        this.gameWebSocketClient.OnUpdate();
     }
 
     private void SetUpUiInteractionEvent()

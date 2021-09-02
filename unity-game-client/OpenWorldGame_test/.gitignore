@@ -80,3 +80,7 @@ crashlytics-build.properties
 /[Aa]ssets/TextMesh Pro.meta
 /[Aa]ssets/ADG_Textures
 /[Aa]ssets/ADG_Textures.meta 
+
+# Secret 
+/[Aa]ssets/Resources/Env/env.txt
+!/[Aa]ssets/Resources/Env/example-env.txt

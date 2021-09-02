@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(LoginWebClient))]
-[RequireComponent(typeof(SignupWebClient))]
 public class LoginSceneController : MonoBehaviour
 {
     [Header("Form")]
@@ -18,7 +16,7 @@ public class LoginSceneController : MonoBehaviour
     [SerializeField] Text       ResultText;
 
     [Header("WebClient")]
-    [SerializeField] private LoginWebClient loginWebClient;
+    private LoginWebClient loginWebClient;
 
     private bool isLoginChallenge = false;
 
@@ -26,6 +24,15 @@ public class LoginSceneController : MonoBehaviour
     {
         SetUpButtonEvent();
         ClientManager.LoadSession();
+
+        if (EnvManager.Read("USE_TLS") == "True")
+        {
+            this.loginWebClient = new LoginWebClient(WebClient.ProtocolType.https, WebClient.HttpRequestMethod.Post, EnvManager.Read("HOST_NAME"), EnvManager.Read("GO_GAME_SERVER_PORT_TLS"), "/api/auth/login", EnvManager.Read("ALLOW_ALL_CERT") == "True");
+        }
+        else
+        {
+            this.loginWebClient = new LoginWebClient(WebClient.ProtocolType.http, WebClient.HttpRequestMethod.Post, EnvManager.Read("HOST_NAME"), EnvManager.Read("GO_GAME_SERVER_PORT"), "/api/auth/login", EnvManager.Read("ALLOW_ALL_CERT") == "True");
+        }
     }
 
     /// <summary>

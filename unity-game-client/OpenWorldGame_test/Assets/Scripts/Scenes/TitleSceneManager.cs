@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(SessionWebClient))]
-[RequireComponent(typeof(LogoutWebClient))]
 public class TitleSceneManager : MonoBehaviour
 {
     [Header("Start Button")]
@@ -13,13 +11,14 @@ public class TitleSceneManager : MonoBehaviour
     [Header("Logout Button")]
     [SerializeField] Button Logout_RequestButton;
 
-    [Header("WebClient")]
-    [SerializeField] private SessionWebClient sessionWebClient;
-    [SerializeField] private LogoutWebClient logoutWebClient;
-
     [Header("Result")]
     [SerializeField] private GameObject session_resultPanel;
     [SerializeField] private Text       session_resultText;
+
+    [Header("WebClient")]
+    private SessionWebClient sessionWebClient;
+    private LogoutWebClient logoutWebClient;
+   
 
     private bool isGameStart = false;
     private bool isLogoutRequest = false;
@@ -28,6 +27,18 @@ public class TitleSceneManager : MonoBehaviour
     {
         SetUpButtonEvent();
         ClientManager.LoadLocalData();
+
+        if (EnvManager.Read("USE_TLS") == "True")
+        {
+            this.sessionWebClient = new SessionWebClient(WebClient.ProtocolType.https, WebClient.HttpRequestMethod.Post, EnvManager.Read("HOST_NAME"), EnvManager.Read("GO_GAME_SERVER_PORT_TLS"), "/api/auth/session", EnvManager.Read("ALLOW_ALL_CERT") == "True");
+            this.logoutWebClient = new LogoutWebClient(WebClient.ProtocolType.https, WebClient.HttpRequestMethod.Post, EnvManager.Read("HOST_NAME"), EnvManager.Read("GO_GAME_SERVER_PORT_TLS"), "/api/auth/logout", EnvManager.Read("ALLOW_ALL_CERT") == "True");
+        }
+        else
+        {
+            this.sessionWebClient = new SessionWebClient(WebClient.ProtocolType.http, WebClient.HttpRequestMethod.Post, EnvManager.Read("HOST_NAME"), EnvManager.Read("GO_GAME_SERVER_PORT"), "/api/auth/session", EnvManager.Read("ALLOW_ALL_CERT") == "True");
+            this.logoutWebClient = new LogoutWebClient(WebClient.ProtocolType.http, WebClient.HttpRequestMethod.Post, EnvManager.Read("HOST_NAME"), EnvManager.Read("GO_GAME_SERVER_PORT"), "/api/auth/logout", EnvManager.Read("ALLOW_ALL_CERT") == "True");
+        }
+        
     }
 
     private void Start()
@@ -118,7 +129,7 @@ public class TitleSceneManager : MonoBehaviour
     public void SessionFailed()
     {
         Debug.Log("Session Failed!");
-        SceneManager.LoadScene(SceneManager.SceneName.Login);
+        SceneManager.LoadScene(SceneManager.SceneName.Signup);
     }
 
 
@@ -195,7 +206,7 @@ public class TitleSceneManager : MonoBehaviour
     {
         Debug.Log("RequestData Error!");
         session_resultText.text = "データ失敗!";
-        SceneManager.LoadScene(SceneManager.SceneName.Login);
+        SceneManager.LoadScene(SceneManager.SceneName.Signup);
     }
 
     public IEnumerator ShowAlertForWhile(GameObject gm, float duration)

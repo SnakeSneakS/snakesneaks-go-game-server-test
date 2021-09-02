@@ -64,13 +64,14 @@ public abstract class WebClient : MonoBehaviour
     /// <param name="hostname"></param>
     /// <param name="port"></param>
     /// <param name="path">default "/"</param>
-    public WebClient(ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port,string path="/")
+    public WebClient(ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port,string path="/", bool certAllowAll=false)
     {
         this.protocol = protocol;
         this.hostname = hostname;
         this.port = port;
         this.httpRequestMethod = requestMethod;
         this.path = path;
+        this.certAllowAll = certAllowAll;
     }
 
     /// <summary>

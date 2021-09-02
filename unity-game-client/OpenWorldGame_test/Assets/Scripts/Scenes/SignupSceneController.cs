@@ -17,7 +17,7 @@ public class SignupSceneController : MonoBehaviour
     [SerializeField] Text ResultText;
 
     [Header("WebClient")]
-    [SerializeField] private SignupWebClient signupWebClient;
+    private SignupWebClient signupWebClient;
 
     private bool isSignupChallenge = false;
 
@@ -25,6 +25,15 @@ public class SignupSceneController : MonoBehaviour
     {
         SetUpButtonEvent();
         ClientManager.LoadSession();
+
+        if (EnvManager.Read("USE_TLS") == "True")
+        {
+            this.signupWebClient = new SignupWebClient(WebClient.ProtocolType.https, WebClient.HttpRequestMethod.Post, EnvManager.Read("HOST_NAME"), EnvManager.Read("GO_GAME_SERVER_PORT_TLS"), "/api/auth/signup", EnvManager.Read("ALLOW_ALL_CERT") == "True");
+        }
+        else
+        {
+            this.signupWebClient = new SignupWebClient(WebClient.ProtocolType.http, WebClient.HttpRequestMethod.Post, EnvManager.Read("HOST_NAME"), EnvManager.Read("GO_GAME_SERVER_PORT"), "/api/auth/signup", EnvManager.Read("ALLOW_ALL_CERT") == "True");
+        }
     }
 
     /// <summary>

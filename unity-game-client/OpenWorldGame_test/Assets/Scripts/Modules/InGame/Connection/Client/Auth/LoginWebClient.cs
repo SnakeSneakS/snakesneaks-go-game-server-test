@@ -49,7 +49,7 @@ public class LoginWebClient : WebClient
     /// <param name="hostname"></param>
     /// <param name="port"></param>
     /// <param name="path">default "/"</param>
-    public LoginWebClient(ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string loginPath) : base(protocol, requestMethod, hostname, port, loginPath)
+    public LoginWebClient(ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string loginPath, bool certAllowAll) : base(protocol, requestMethod, hostname, port, loginPath, certAllowAll)
     {
     }
 

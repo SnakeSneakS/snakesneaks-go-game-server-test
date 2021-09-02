@@ -51,7 +51,7 @@ public class SignupWebClient : WebClient
     /// <param name="hostname"></param>
     /// <param name="port"></param>
     /// <param name="path">default "/"</param>
-    public SignupWebClient(ProtocolType protocol,HttpRequestMethod requestMethod, string hostname, string port, string signupPath) : base(protocol, requestMethod, hostname, port, signupPath)
+    public SignupWebClient(ProtocolType protocol,HttpRequestMethod requestMethod, string hostname, string port, string signupPath, bool certAllowAll) : base(protocol, requestMethod, hostname, port, signupPath, certAllowAll)
     {
     }
 

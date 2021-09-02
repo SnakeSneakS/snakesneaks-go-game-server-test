@@ -48,7 +48,7 @@ public abstract class WebSocketClient: MonoBehaviour
         if (this.ws == null)
         {
             this.ws = new WebSocket(uri);
-            Debug.Log($"uri");
+            Debug.Log($"uri: {uri}");
 
             //when received
             ws.OnMessage += (bytes) => {
@@ -92,7 +92,7 @@ public abstract class WebSocketClient: MonoBehaviour
     }
 
     //Update
-    public void Update()
+    public void OnUpdate()
     {
 #if !UNITY_WEBGL || UNITY_EDITOR
         if (this.ws != null)

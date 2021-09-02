@@ -49,7 +49,7 @@ public class LogoutWebClient : WebClient
     /// <param name="hostname"></param>
     /// <param name="port"></param>
     /// <param name="path">default "/"</param>
-    public LogoutWebClient(ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string logoutPath) : base(protocol, requestMethod, hostname, port, logoutPath)
+    public LogoutWebClient(ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string logoutPath, bool certAllowAll) : base(protocol, requestMethod, hostname, port, logoutPath, certAllowAll)
     {
     }
 

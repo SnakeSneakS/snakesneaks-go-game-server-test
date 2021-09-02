@@ -45,7 +45,7 @@ public class SessionWebClient: WebClient
     /// <param name="hostname"></param>
     /// <param name="port"></param>
     /// <param name="path">default "/"</param>
-    public SessionWebClient(ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string sessionPath) : base(protocol, requestMethod, hostname, port, sessionPath)
+    public SessionWebClient(ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string sessionPath, bool certAllowAll=false) : base(protocol, requestMethod, hostname, port, sessionPath, certAllowAll)
     {
     }
 
@@ -57,7 +57,7 @@ public class SessionWebClient: WebClient
     /// <param name="hostname"></param>
     /// <param name="port"></param>
     /// <param name="path">default "/"</param>
-    public SessionWebClient(SessionRequestData sessionRequestData, ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string sessionPath) : base(protocol, requestMethod, hostname, port, sessionPath)
+    public SessionWebClient(SessionRequestData sessionRequestData, ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string sessionPath, bool certAllowAll=false) : base(protocol, requestMethod, hostname, port, sessionPath, certAllowAll)
     {
         this.sessionRequestData = sessionRequestData;
     }
@@ -69,7 +69,7 @@ public class SessionWebClient: WebClient
     /// <param name="hostname"></param>
     /// <param name="port"></param>
     /// <param name="path">default "/"</param>
-    public SessionWebClient(Model.Session session, ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string sessionPath) : base(protocol, requestMethod, hostname, port, sessionPath)
+    public SessionWebClient(Model.Session session, ProtocolType protocol, HttpRequestMethod requestMethod, string hostname, string port, string sessionPath, bool certAllowAll) : base(protocol, requestMethod, hostname, port, sessionPath, certAllowAll)
     {
         SetData(session);
     }

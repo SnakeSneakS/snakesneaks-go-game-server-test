@@ -692,8 +692,6 @@ GameObject:
   m_Component:
   - component: {fileID: 637652363}
   - component: {fileID: 637652359}
-  - component: {fileID: 637652360}
-  - component: {fileID: 637652361}
   m_Layer: 0
   m_Name: LoginSceneController
   m_TagString: Untagged
@@ -719,50 +717,7 @@ MonoBehaviour:
   Signup_SceneLoadButton: {fileID: 1842879952}
   ResultPanel: {fileID: 1512865659}
   ResultText: {fileID: 1500538412}
-  loginWebClient: {fileID: 637652360}
---- !u!114 &637652360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 637652358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 997514e8c19ab4267a76f5cf79815ecc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  protocol: 0
-  hostname: localhost
-  port: 8080
-  path: /api/auth/login
-  httpRequestMethod: 1
-  certAllowAll: 1
-  loginRequestData:
-    email: 
-    password: 
---- !u!114 &637652361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 637652358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2330303ae471645dc85e8e5b0c26022d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  protocol: 0
-  hostname: localhost
-  port: 8080
-  path: /api/auth/signup
-  httpRequestMethod: 1
-  certAllowAll: 1
-  signupRequestData:
-    username: 
-    email: 
-    password: 
+  CertAllowAll: 1
 --- !u!4 &637652363
 Transform:
   m_ObjectHideFlags: 0

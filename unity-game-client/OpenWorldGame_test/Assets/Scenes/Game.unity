@@ -313,36 +313,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &94422484
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 94422485}
-  m_Layer: 0
-  m_Name: NetworkManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &94422485
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 94422484}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 661433405}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &317942505
 GameObject:
   m_ObjectHideFlags: 0
@@ -878,7 +848,6 @@ Transform:
   m_Children:
   - {fileID: 2008854028}
   - {fileID: 317942506}
-  - {fileID: 94422485}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2450,7 +2419,6 @@ GameObject:
   - component: {fileID: 2008854028}
   - component: {fileID: 2008854029}
   - component: {fileID: 2008854030}
-  - component: {fileID: 2008854031}
   - component: {fileID: 2008854032}
   m_Layer: 0
   m_Name: GameController
@@ -2505,25 +2473,8 @@ MonoBehaviour:
   moveIntervalSeconds: 0.5
   joystick: {fileID: 1587621338}
   myPlayerController: {fileID: 1537521354}
-  gameWebSocketClient: {fileID: 2008854031}
   gameMethodHandler: {fileID: 2008854029}
   ingameManager: {fileID: 2008854032}
---- !u!114 &2008854031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2008854027}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82607a785ff21495c8b1ae63a9cdc584, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  protocol: 0
-  hostname: localhost
-  port: 8080
-  path: /api/game/websocket
 --- !u!114 &2008854032
 MonoBehaviour:
   m_ObjectHideFlags: 0
