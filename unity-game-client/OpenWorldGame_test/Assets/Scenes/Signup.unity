@@ -2025,7 +2025,8 @@ MonoBehaviour:
   Login_SceneLoadButton: {fileID: 1320537986}
   ResultPanel: {fileID: 1899112729}
   ResultText: {fileID: 759670973}
-  CertAllowAll: 1
+  EmailRow: {fileID: 1900819459}
+  PasswordRow: {fileID: 822655878}
 --- !u!4 &1815057128
 Transform:
   m_ObjectHideFlags: 0

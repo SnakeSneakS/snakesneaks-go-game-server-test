@@ -19,6 +19,11 @@ public class SignupSceneController : MonoBehaviour
     [Header("WebClient")]
     private SignupWebClient signupWebClient;
 
+    [Header("ForDevideCreateAccountOrNot")]
+    [SerializeField] private GameObject EmailRow;
+    [SerializeField] private GameObject PasswordRow;
+
+
     private bool isSignupChallenge = false;
 
     private void Awake()
@@ -33,6 +38,16 @@ public class SignupSceneController : MonoBehaviour
         else
         {
             this.signupWebClient = new SignupWebClient(WebClient.ProtocolType.http, WebClient.HttpRequestMethod.Post, EnvManager.Read("HOST_NAME"), EnvManager.Read("GO_GAME_SERVER_PORT"), "/api/auth/signup", EnvManager.Read("ALLOW_ALL_CERT") == "True");
+        }
+
+        if (EnvManager.Read("CREATE_ACCOUNT") != "True")
+        {
+            this.Login_SceneLoadButton.gameObject.SetActive(false);
+            this.EmailRow.SetActive(false);
+            this.PasswordRow.SetActive(false);
+            this.EmailInputField.text = "null@null";
+            this.PasswordInputField.text = "nullpassword";
+            this.Signup_RequestButton.GetComponentInChildren<Text>().text = "Start";
         }
     }
 
