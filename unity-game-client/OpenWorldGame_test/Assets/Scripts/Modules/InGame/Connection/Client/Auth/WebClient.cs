@@ -15,6 +15,8 @@ public abstract class WebClient : MonoBehaviour
 
     [SerializeField] protected bool certAllowAll = false;
 
+    const int timeout = 3;
+
     //store data read from response 
     public object data { get; protected set; } //parsed data
     public string message { get; protected set; } //message show to users or developers 
@@ -98,6 +100,7 @@ public abstract class WebClient : MonoBehaviour
         Refresh();
         using (UnityWebRequest www = new UnityWebRequest($"{protocol.ToString()}://{hostname}:{port}{path}", this.httpRequestMethod.ToString()))
         {
+            www.timeout = timeout;
             this.result = ResultType.ConnInProgress;
 
             //Certification
