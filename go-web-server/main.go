@@ -66,8 +66,8 @@ func main() {
 		sessionData := make([]SessionData, 0)
 		//run when DEBUG_MODE
 		if os.Getenv("DEBUG_MODE") == "True" {
-			hostname := os.Getenv("GO_GAME_SERVER_CONTAINER_NAME")
-			res, err := http.Get(fmt.Sprintf("http://%s:%s/api/debug/session", hostname, os.Getenv("GO_GAME_SERVER_PORT")))
+			allow_hostname := os.Getenv("GO_GAME_SERVER_CONTAINER_NAME")
+			res, err := http.Get(fmt.Sprintf("http://%s:%s/api/debug/session", allow_hostname, os.Getenv("GO_GAME_SERVER_PORT")))
 			if err != nil {
 				log.Println(err)
 				ctx.HTML(200, "index.html", gin.H{
@@ -145,19 +145,16 @@ func main() {
 		})
 	*/
 
-	hostname := os.Getenv("HOST_NAME")
-	if hostname == "localhost" {
-		hostname = ""
-	}
+	allow_hostname := os.Getenv("ALLOW_HOST_NAME")
 	if os.Getenv("USE_TLS") == "True" {
 		//USE TLS
-		addr := fmt.Sprintf("%s:%s", hostname, os.Getenv("GO_WEB_SERVER_PORT_TLS"))
+		addr := fmt.Sprintf("%s:%s", allow_hostname, os.Getenv("GO_WEB_SERVER_PORT_TLS"))
 		crtfile := fmt.Sprintf("./secret/%s", os.Getenv("GO_WEB_TLS_CERT_FILE"))
 		keyfile := fmt.Sprintf("./secret/%s", os.Getenv("GO_WEB_TLS_KEY_FILE"))
 		router.RunTLS(addr, crtfile, keyfile)
 	} else {
 		//DON'T USE TLS
-		addr := fmt.Sprintf("%s:%s", hostname, os.Getenv("GO_WEB_SERVER_PORT"))
+		addr := fmt.Sprintf("%s:%s", allow_hostname, os.Getenv("GO_WEB_SERVER_PORT"))
 		router.Run(addr)
 	}
 
