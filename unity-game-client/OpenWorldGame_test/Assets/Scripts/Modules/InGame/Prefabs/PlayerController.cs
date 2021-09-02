@@ -75,6 +75,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        this.mainCameraController = Camera.main.GetComponent<MainCameraController>();
+    }
+
     private void Update()
     {
         
@@ -87,6 +92,6 @@ public class PlayerController : MonoBehaviour
         }
 
         //NameControll
-        this.usernameUI.transform.rotation = Quaternion.LookRotation((this.usernameUI.transform.position - mainCameraController.gameObject.transform.position));
+        if(this.usernameUI!=null) this.usernameUI.transform.rotation = Quaternion.LookRotation((this.usernameUI.transform.position - mainCameraController.gameObject.transform.position));
     }
 }

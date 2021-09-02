@@ -41,6 +41,17 @@ public partial class GameSceneController : MonoBehaviour
         this.gameMethodHandler.SendEnterWorld();
     }
 
+    private void Update()
+    {
+        //UpdateDispatcher();
+        this.gameWebSocketClient.OnUpdate();
+    }
+
+    private void OnApplicationQuit()
+    {
+        this.gameWebSocketClient.OnApplicationQuit();
+    }
+
     private void SetUpConnectionEvent()
     {
         //when connection failed
@@ -67,11 +78,17 @@ public partial class GameSceneController : MonoBehaviour
             Debug.Log($"Ingame Chat Received: \nuser_id: {e.user_id}, text: {e.chatMethod.text}");
             OnReceiveChat(e.user_id, e.chatMethod);
         };
-        //receive enterworld 
+        //receive enterWorld 
         this.gameMethodHandler.OnEnterWorldReceive += (e) =>
         {
             Debug.Log($"Ingame EnterWorld Received: \nuser_id: {e.user_id}, username: {e.enterWorldMethod.ingame_client_data.info.username}");
             OnReceiveEnterWorld(e.user_id, e.enterWorldMethod);
+        };
+        //receive exitWorld
+        this.gameMethodHandler.OnExitWorldEventHandler += (e) =>
+        {
+            Debug.Log($"Ingame ExitWorld Received] \nuser_id: {e.user_id}");
+            OnReceiveExitWorld(e.user_id);
         };
         //receive getIngameClientsData
         this.gameMethodHandler.OnGetIngameClientsDataReceive += (e) =>
@@ -93,12 +110,7 @@ public partial class GameSceneController : MonoBehaviour
         };
     }
 
-    private void Update()
-    {
-        //UpdateDispatcher();
-        this.gameWebSocketClient.OnUpdate();
-    }
-
+    
     private void SetUpUiInteractionEvent()
     {
         //SendChat  

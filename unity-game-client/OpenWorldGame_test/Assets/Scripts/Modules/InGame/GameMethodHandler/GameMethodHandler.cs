@@ -107,6 +107,7 @@ public partial class GameMethodHandler : MonoBehaviour
                             ReceiveEnterWorld(user_id, method.content);
                             break;
                         case Gamemodel.GameMethodType.ExitWorld:
+                            ReceiveExitWorld(user_id);
                             break;
                         case Gamemodel.GameMethodType.Chat:
                             ReceiveChat(user_id,method.content);

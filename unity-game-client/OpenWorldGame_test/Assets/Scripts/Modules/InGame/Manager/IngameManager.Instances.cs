@@ -49,4 +49,25 @@ public partial class IngameManager : MonoBehaviour
             instance.playerController.SetUsername(client.info.username);
         }
     }
+
+    private void DeleteIngameClientInstance(uint user_id)
+    {
+        if (!this.IngameClientsInstances.ContainsKey(user_id))
+        {
+            Debug.LogError("このユーザのインスタンスは存在していません。");
+            return;
+        }
+        else
+        {
+            try
+            {
+                GameObject.Destroy(this.IngameClientsInstances[user_id].playerPrefab.gameObject);
+                this.IngameClientsInstances.Remove(user_id);
+            }
+            catch(Exception e) {
+                Debug.LogError(e);
+            }
+            
+        }
+    }
 }

@@ -33,6 +33,24 @@ public partial class IngameManager : MonoBehaviour
                 Debug.LogError(e);
             }
         }
-        
+    }
+
+    private void DeleteIngameClientData(uint user_id)
+    {
+        if (!this.IngameClientsData.ContainsKey(user_id))
+        {
+            Debug.LogError("このユーザは存在していません。");
+        }
+        else
+        {
+            try
+            {
+                this.IngameClientsData.Remove(user_id);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+        }
     }
 }

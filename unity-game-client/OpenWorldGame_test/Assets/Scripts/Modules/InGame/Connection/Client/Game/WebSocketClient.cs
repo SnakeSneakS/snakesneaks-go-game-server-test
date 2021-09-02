@@ -83,7 +83,7 @@ public abstract class WebSocketClient: MonoBehaviour
     }
 
     //OnApplicationQuit
-    private async void OnApplicationQuit()
+    public async void OnApplicationQuit()
     {
         if (this.ws != null)
         {

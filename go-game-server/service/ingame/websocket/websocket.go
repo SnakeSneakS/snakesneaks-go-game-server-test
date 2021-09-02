@@ -42,7 +42,7 @@ func NewConnection(w http.ResponseWriter, r *http.Request) {
 		messageType, message, err := conn.ReadMessage()
 		if err != nil {
 			log.Println(err)
-			delete(gamedata.InGameClientData, conn)
+			OnClosedConnection(conn)
 			log.Println("Delete connection!")
 			return
 		}

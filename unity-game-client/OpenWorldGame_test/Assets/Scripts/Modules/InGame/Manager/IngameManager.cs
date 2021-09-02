@@ -23,6 +23,7 @@ public partial class IngameManager: MonoBehaviour
 
     public void DeleteIngameClient(uint user_id)
     {
-
+        DeleteIngameClientInstance(user_id);
+        DeleteIngameClientData(user_id);
     }
 }
