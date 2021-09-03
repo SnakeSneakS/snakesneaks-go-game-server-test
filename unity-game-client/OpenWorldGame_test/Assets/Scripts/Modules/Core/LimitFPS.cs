@@ -10,6 +10,8 @@ public class LimitFPS : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+#if !UNITY_WEBGL
         if(isLimitFPS) Application.targetFrameRate = targetFPS;
+#endif
     }
 }
